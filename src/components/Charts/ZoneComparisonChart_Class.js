@@ -7,7 +7,7 @@ import {
     Title,
     Tooltip,
     Legend
-} from 'chart.js';
+} from 'chart.js/auto';
 
 // Register all needed elements
 Chart.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
