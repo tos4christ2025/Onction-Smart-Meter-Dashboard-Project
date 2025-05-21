@@ -1,0 +1,36 @@
+.sidebar {
+    width: 250px;
+    background-color: #1f2937;
+    color: white;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    padding: 1.5rem;
+}
+
+.sidebar-header {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #374151;
+    margin-bottom: 1.5rem;
+}
+
+.menu-item {
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 0.5rem;
+}
+
+.menu-item:hover {
+    background-color: #374151;
+}
+
+.menu-item.active {
+    background-color: #3b82f6;
+}
+
+.submenu {
+    margin-left: 1.5rem;
+}
