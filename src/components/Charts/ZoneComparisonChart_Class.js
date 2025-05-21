@@ -20,10 +20,9 @@ class ZoneComparisonChart extends Component {
     }
 
     componentDidMount() {
-        // setTimeout(() => {
-        //     this.initializeChart();
-        // }, 0);
-        this.initializeChart();
+        setTimeout(() => {
+            this.initializeChart();
+        }, 0);
     }
 
     componentDidUpdate(prevProps) {
