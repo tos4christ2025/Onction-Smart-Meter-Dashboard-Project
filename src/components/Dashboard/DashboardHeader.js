@@ -6,7 +6,7 @@ function DashboardHeader({ totalUsage, savings }) {
         return (
             <div className="mb-6" data-name="dashboard-header">
                 <div className="flex justify-between items-center mb-4" data-name="header-content">
-                    <h1 className="text-2xl font-bold" data-name="dashboard-title">Energy Dashboard</h1>
+                    <h1 className="text-2xl font-bold" data-name="dashboard-title">Onction Energy Dashboard</h1>
                     <div className="flex items-center space-x-4" data-name="header-actions">
                         <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors" data-name="export-button">
                             <i className="fas fa-download mr-2"></i>
