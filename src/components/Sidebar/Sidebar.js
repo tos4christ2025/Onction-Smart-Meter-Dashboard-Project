@@ -19,7 +19,7 @@ class Sidebar extends React.Component {
             <div className="sidebar" data-name="sidebar">
                 <div className="sidebar-header" data-name="sidebar-header">
                     <h1 className="text-xl font-bold" data-name="sidebar-title">
-                        Smart Meter Dashboard
+                        Onction Energy Performance Dashboard
                     </h1>
                 </div>
                 
