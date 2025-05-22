@@ -48,28 +48,25 @@ class Sidebar extends React.Component {
                         isActive={activeItem === 'zone-b'}
                         onClick={() => this.setState({ activeItem: 'zone-b' })}
                     />
-                </MenuItem>
-                
+                </MenuItem>                
                 <MenuItem 
                     icon="fa-chart-pie" 
                     label="Analytics"
                     isActive={activeItem === 'analytics'}
                     onClick={() => this.setState({ activeItem: 'analytics' })}
-                />
-                
+                />                
                 <MenuItem 
                     icon="fa-bell" 
                     label="Alerts"
                     isActive={activeItem === 'alerts'}
                     onClick={() => this.setState({ activeItem: 'alerts' })}
-                />
-                
-                <MenuItem 
-                    icon="fa-gear" 
-                    label="Settings"
-                    isActive={activeItem === 'settings'}
-                    onClick={() => this.setState({ activeItem: 'settings' })}
-                />
+                />                
+            <MenuItem 
+                icon="fa-gear" 
+                label="Settings"
+                isActive={activeItem === 'settings'}
+                onClick={() => this.setState({ activeItem: 'settings' })}
+            />
             </div>
         );
     }
