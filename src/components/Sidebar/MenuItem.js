@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class MenuItem extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showChildren: false,
+        };
+    }
 
     render() {
         try {
@@ -10,17 +16,23 @@ class MenuItem extends Component {
                 <div data-name="menu-item-container">
                     <div
                         className={`menu-item ${isActive ? 'active' : ''}`}
-                        onClick={onClick}
+                        //  This controls hiding and showing the children
+                        //  and also calls the onClick function passed as a prop
+                        //  to the MenuItem component
+                        //  This is to ensure that the onClick function is called
+                        //  when the MenuItem is clicked
+                        //  and also to toggle the children
+                        onClick={() => {onClick(); this.setState({ showChildren: !this.state.showChildren })}}
                         data-name="menu-item"
                     >
                         <i className={`fas ${icon} mr-2`} data-name="menu-item-icon"></i>
                         <span data-name="menu-item-label">{label}</span>
                     </div>
-                    {children && (
-                        <div className="submenu" data-name="submenu">
-                            {children}
-                        </div>
-                    )}
+                        {this.state.showChildren && (
+                            <div className="submenu" data-name="submenu">
+                                {children}
+                            </div>
+                        )}
                 </div>
             );
         } catch (error) {
