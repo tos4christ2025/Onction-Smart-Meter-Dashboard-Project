@@ -1,5 +1,5 @@
 import React from 'react';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard_class';
 import './tailwind.css';
 import './styles/App.css';
 import { library } from '@fortawesome/fontawesome-svg-core';

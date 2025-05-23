@@ -55,7 +55,10 @@ function Dashboard() {
 
     return (
         <div className="dashboard-container" data-name="dashboard">
-            <Sidebar />
+            <div className="sidebar" data-name="sidebar">
+                <Sidebar />
+            </div>
+            {/* <Sidebar /> */}
             <div className="main-content" data-name="main-content">
                 <DashboardHeader 
                     totalUsage={data.totalUsage}
