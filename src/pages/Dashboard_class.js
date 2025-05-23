@@ -22,7 +22,7 @@ class Dashboard extends Component {
       showEnergyFlow: true,
       viewMode: "daily", // hourly, daily, weekly
       side_bar_width: "250px",
-      overflow: "scroll",
+      overflow: "overflow-scroll",
     };
   }
 
