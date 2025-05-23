@@ -28,8 +28,7 @@ class Sidebar extends React.Component {
                     label="Dashboard"
                     isActive={activeItem === 'dashboard'}
                     onClick={() => this.setState({ activeItem: 'dashboard' })}
-                />
-                
+                />                
                 <MenuItem 
                     icon="fa-bolt" 
                     label="Energy Zones"
@@ -48,25 +47,43 @@ class Sidebar extends React.Component {
                         isActive={activeItem === 'zone-b'}
                         onClick={() => this.setState({ activeItem: 'zone-b' })}
                     />
-                </MenuItem>                
+                </MenuItem>
+                <MenuItem 
+                    icon="fa-chart-pie" 
+                    label="Availability"
+                    isActive={activeItem === 'availability'}
+                    onClick={() => this.setState({ activeItem: 'availability' })}
+                />
+                <MenuItem 
+                    icon="fa-chart-pie" 
+                    label="Payments"
+                    isActive={activeItem === 'payments'}
+                    onClick={() => this.setState({ activeItem: 'payments' })}
+                />
+                <MenuItem 
+                    icon="fa-chart-pie" 
+                    label="Energy"
+                    isActive={activeItem === 'consumption'}
+                    onClick={() => this.setState({ activeItem: 'consumption' })}
+                />
                 <MenuItem 
                     icon="fa-chart-pie" 
                     label="Analytics"
                     isActive={activeItem === 'analytics'}
                     onClick={() => this.setState({ activeItem: 'analytics' })}
-                />                
+                />
                 <MenuItem 
                     icon="fa-bell" 
                     label="Alerts"
                     isActive={activeItem === 'alerts'}
                     onClick={() => this.setState({ activeItem: 'alerts' })}
                 />                
-            <MenuItem 
-                icon="fa-gear" 
-                label="Settings"
-                isActive={activeItem === 'settings'}
-                onClick={() => this.setState({ activeItem: 'settings' })}
-            />
+                <MenuItem 
+                    icon="fa-gear" 
+                    label="Settings"
+                    isActive={activeItem === 'settings'}
+                    onClick={() => this.setState({ activeItem: 'settings' })}
+                />
             </div>
         );
     }

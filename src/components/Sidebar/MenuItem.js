@@ -17,11 +17,6 @@ class MenuItem extends Component {
                     <div
                         className={`menu-item ${isActive ? 'active' : ''} float-start`}
                         //  This controls hiding and showing the children
-                        //  and also calls the onClick function passed as a prop
-                        //  to the MenuItem component
-                        //  This is to ensure that the onClick function is called
-                        //  when the MenuItem is clicked
-                        //  and also to toggle the children
                         onClick={() => {onClick(); this.setState({ showChildren: !this.state.showChildren })}}
                         data-name="menu-item"
                     >
