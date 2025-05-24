@@ -1,5 +1,9 @@
 import React from 'react';
-import Dashboard from './pages/Dashboard_class';
+import { BrowserRouter as Router, Route, Switch, Routes } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import AlertPanel from './components/Dashboard/AlertPanel';
+import Availability_Details from './pages/Availability_Details';
+import Availability from './pages/Availability Pages/Availability';
 import './tailwind.css';
 import './styles/App.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -11,7 +15,6 @@ import '../src/styles/index.css';
 import '../src/styles/main.css';
 
 library.add(faCoffee, faUser);
-
 
 class App extends React.Component {
   constructor(props) {
@@ -35,9 +38,18 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div className="app" data-name="app">
-        <Dashboard />
-      </div>
+      <Router>
+        <div className="app" data-name="app">  
+          <Routes>                
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/alerts" element={<AlertPanel />} />
+              <Route path="/availability/*" element={<Availability_Details />} />
+              <Route path="/availability/:zoneId/*" element={<Availability />} />       
+          </Routes>
+         </div>
+      </Router>
+      
     );
   }
 }

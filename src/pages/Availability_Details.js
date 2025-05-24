@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { withRouter } from '../utils/withRouter';
 import Sidebar from '../components/Sidebar/Sidebar';
-import EnergyUsageChart from '../components/Charts/EnergyUsageChart';
-import ZoneComparisonChart from '../components/Charts/ZoneComparisonChart_Class';
-import EnergyFlowDiagram from '../components/Charts/EnergyFlowDiagram';
-// import AlertPanel from '../components/Dashboard/AlertPanel';
-import ZoneOverview from '../components/Dashboard/ZoneOverview';
-import DashboardHeader from '../components/Dashboard/DashboardHeader';
+import AvailabilityChart from '../components/Charts/AvailabilityChart';
 import { getMockData } from '../utils/dataUtils';
+import Availability from './Availability Pages/Availability';
 
-class Dashboard extends Component {
+class Availability_Details extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,9 +15,6 @@ class Dashboard extends Component {
       error: null,
       selectedZone: "Zone A",
       sidebarCollapsed: false,
-      showUsageChart: true,
-      showAlerts: true,
-      showEnergyFlow: true,
       viewMode: "daily", // hourly, daily, weekly
       side_bar_width: "250px",
       overflow: "overflow-scroll",
@@ -28,13 +22,13 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.fetchAvailability();
   }
 
-  async fetchData() {
+  async fetchAvailability() {
     try {
       this.setState({ isLoading: true });
-      const mockData = getMockData();
+      const mockData = getMockData().availability;
       this.setState({ data: mockData });
     } catch (err) {
       this.setState({ error: err });
@@ -51,10 +45,6 @@ class Dashboard extends Component {
     }));
   };
 
-  toggleSection = (section) => {
-    this.setState((prevState) => ({ [section]: !prevState[section] }));
-  };
-
   handleViewModeChange = (mode) => {
     this.setState({ viewMode: mode });
   };
@@ -63,14 +53,14 @@ class Dashboard extends Component {
     console.error('Dashboard error:', err);
   }
 
+  navigateToZone = (link) => {
+    this.props.navigate(link);
+  }
+
   render() {
     const { data, isLoading, error } = this.state;
     const {
-      selectedZone,
       sidebarCollapsed,
-      showUsageChart,
-      showAlerts,
-      showEnergyFlow,
       viewMode,
     } = this.state;
 
@@ -94,45 +84,43 @@ class Dashboard extends Component {
     }
 
     if (!data) return null;
-
+    const zones_chart_data = {}
+    const datasets = [
+                        {
+                            label: 'Uptime',
+                            data: data.zones_avg_uptime,
+                            backgroundColor: '#3b82f6'
+                        },
+                        {
+                            label: 'Downtime',
+                            data: data.zones_avg_downtime,
+                            backgroundColor: '#3b34f6'
+                        }
+                    ];
+    zones_chart_data.datasets = datasets;
+    zones_chart_data.labels = data.zones;
+    zones_chart_data.title = "Zone Availability";
+    zones_chart_data.y_title = "Hours (hrs)";
+    zones_chart_data.x_title = "Zones";
     return (
       <div className="dashboard-container" data-name="dashboard">
-        {/* <div className="sidebar" data-name="sidebar"> */}
           <Sidebar 
           collapsed={sidebarCollapsed}
           onToggleCollapse={this.toggleSidebar}
-          onToggleSection={this.toggleSection}
           side_bar_width={this.state.side_bar_width}
           overflow={this.state.overflow}
-          sections={{
-            showUsageChart,
-            showAlerts,
-            showEnergyFlow,
-          }}
-          onSelectZone={(zone) => this.setState({ selectedZone: zone })}
-          />
-        {/* </div> */}
-
-        <div style={{marginLeft: this.state.side_bar_width}} className="main-content" data-name="main-content">    
-          <DashboardHeader 
-            totalUsage={data.totalUsage}
-            savings={data.savings}
           />
 
-          <ZoneOverview zones={data.zones} />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" data-name="charts-grid">
-            <EnergyUsageChart data={data.energyUsage} />
-            <ZoneComparisonChart data={data.zoneComparison} />
+          <div style={{marginLeft: this.state.side_bar_width}} className="w-full grid grid-cols-1  m-20" data-name="charts-grid">
+            <AvailabilityChart data={zones_chart_data} />
           </div>
-
-          <EnergyFlowDiagram data={data.energyFlow} />
-
-          {/* <AlertPanel alerts={data.alerts} /> */}
+          <Routes>
+            {/* <Route path="/availability/:zoneId" element={<AvailabilityChart data={data} />} /> */}
+            <Route path="/availability/:zoneId/*" element={<Availability data={data} />} />
+          </Routes>
         </div>
-      </div>
     );
   }
 }
 
-export default withRouter(Dashboard);
+export default withRouter(Availability_Details);

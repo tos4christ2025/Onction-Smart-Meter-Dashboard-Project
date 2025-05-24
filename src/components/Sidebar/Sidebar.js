@@ -1,29 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MenuItem from './MenuItem';
+import withRouter from '../../utils/withRouter';
 
 class Sidebar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             activeItem: 'dashboard',
+            route: '/dashboard',
         };
     }
     componentDidCatch(error, info) {
         console.error('Error caught in Sidebar:', error, info);
         reportError(error);
     }
+    navigateToZone = (link) => {
+        this.props.navigate(link);
+    };
+
     render() {
         const { activeItem } = this.state;
         const {
             collapsed,
             onToggleCollapse,
-            onToggleSection,
-            sections,
-            onSelectZone,
             side_bar_width,
             overflow,
         } = this.props;
-        console.log(overflow)
+        //console.log(overflow)
         return (
             <div
                 // style={{width: collapsed ? "4rem" : "15rem"}}
@@ -52,7 +55,7 @@ class Sidebar extends React.Component {
                         icon="fa-chart-line" 
                         label="Dashboard"
                         isActive={activeItem === 'dashboard'}
-                        onClick={() => this.setState({ activeItem: 'dashboard' })}
+                        onClick={() => {this.setState({ activeItem: 'dashboard' }); this.navigateToZone('/dashboard')}}
                     />                
                     <MenuItem 
                         icon="fa-bolt" 
@@ -64,33 +67,108 @@ class Sidebar extends React.Component {
                             icon="fa-circle" 
                             label="Zone A"
                             isActive={activeItem === 'zone-a'}
-                            onClick={() => this.setState({ activeItem: 'zone-a' })}
+                            onClick={() => {
+                                this.setState({ activeItem: 'zone-a' }); 
+                                // this.navigateToZone('zones/:zone-a/energy')
+                            }}
                         />
                         <MenuItem 
                             icon="fa-circle" 
                             label="Zone B"
                             isActive={activeItem === 'zone-b'}
-                            onClick={() => this.setState({ activeItem: 'zone-b' })}
+                            onClick={() => {
+                                this.setState({ activeItem: 'zone-b' }); 
+                                // this.navigateToZone('zones/:zone-b/energy')
+                            }}
                         />
                     </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
                         label="Availability"
                         isActive={activeItem === 'availability'}
-                        onClick={() => this.setState({ activeItem: 'availability' })}
-                    />
+                        onClick={() => {
+                            this.setState({ activeItem: 'availability' }); 
+                            this.navigateToZone('/availability')
+                        }}
+                    >
+                        <MenuItem 
+                            icon="fa-circle" 
+                            label="Zone A"
+                            isActive={activeItem === 'zone-a'}
+                            onClick={() => {
+                                this.setState({ activeItem: 'zone-a' }); 
+                                this.navigateToZone('/availability/zone-a/')
+                            }}
+                        />
+                        <MenuItem 
+                            icon="fa-circle" 
+                            label="Zone B"
+                            isActive={activeItem === 'zone-b'}
+                            onClick={() => {
+                                this.setState({ activeItem: 'zone-b' }); 
+                                this.navigateToZone('/availability/zone-b/')
+                            }}
+                        />
+                        <MenuItem 
+                            icon="fa-circle" 
+                            label="Zone C"
+                            isActive={activeItem === 'zone-c'}
+                            onClick={() => {
+                                this.setState({ activeItem: 'zone-c' }); 
+                                this.navigateToZone('/availability/zone-c/')
+                            }}
+                        />
+                    </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
                         label="Payments"
                         isActive={activeItem === 'payments'}
                         onClick={() => this.setState({ activeItem: 'payments' })}
-                    />
+                    >
+                        <MenuItem 
+                            icon="fa-circle" 
+                            label="Zone A"
+                            isActive={activeItem === 'zone-a'}
+                            onClick={() => {
+                                this.setState({ activeItem: 'zone-a' }); 
+                                // this.navigateToZone('zones/:zone-a/payments')
+                            }}
+                        />
+                        <MenuItem 
+                            icon="fa-circle" 
+                            label="Zone B"
+                            isActive={activeItem === 'zone-b'}
+                            onClick={() => {
+                                this.setState({ activeItem: 'zone-b' }); 
+                                // this.navigateToZone('zones/:zone-b/payments')
+                            }}
+                        />
+                    </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
-                        label="Energy"
+                        label="Energy Usage"
                         isActive={activeItem === 'consumption'}
                         onClick={() => this.setState({ activeItem: 'consumption' })}
-                    />
+                    >
+                        <MenuItem 
+                            icon="fa-circle" 
+                            label="Zone A"
+                            isActive={activeItem === 'zone-a'}
+                            onClick={() => {
+                                this.setState({ activeItem: 'zone-a' }); 
+                                // this.navigateToZone('zones/:zone-a/energy_consumption')
+                            }}
+                        />
+                        <MenuItem 
+                            icon="fa-circle" 
+                            label="Zone B"
+                            isActive={activeItem === 'zone-b'}
+                            onClick={() => {
+                                this.setState({ activeItem: 'zone-b' }); 
+                                // this.navigateToZone('zones/:zone-b/energy_consumption')
+                            }}
+                        />
+                    </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
                         label="Analytics"
@@ -101,7 +179,10 @@ class Sidebar extends React.Component {
                         icon="fa-bell" 
                         label="Alerts"
                         isActive={activeItem === 'alerts'}
-                        onClick={() => this.setState({ activeItem: 'alerts' })}
+                        onClick={() => {
+                            this.setState({ activeItem: 'alerts', route: '/alerts' }); 
+                            this.navigateToZone('/alerts')
+                        }}
                     />                
                     <MenuItem 
                         icon="fa-gear" 
@@ -110,74 +191,9 @@ class Sidebar extends React.Component {
                         onClick={() => this.setState({ activeItem: 'settings' })}
                     />
                 </div>)}
-        </div>
+            </div>
         );
     }
-    // try {
-    //     const [activeItem, setActiveItem] = useState('dashboard');
-
-    //     return (
-    //         <div className="sidebar" data-name="sidebar">
-    //             <div className="sidebar-header" data-name="sidebar-header">
-    //                 <h1 className="text-xl font-bold" data-name="sidebar-title">
-    //                     Smart Meter Dashboard
-    //                 </h1>
-    //             </div>
-                
-    //             <MenuItem 
-    //                 icon="fa-chart-line" 
-    //                 label="Dashboard"
-    //                 isActive={activeItem === 'dashboard'}
-    //                 onClick={() => setActiveItem('dashboard')}
-    //             />
-                
-    //             <MenuItem 
-    //                 icon="fa-bolt" 
-    //                 label="Energy Zones"
-    //                 isActive={activeItem === 'zones'}
-    //                 onClick={() => setActiveItem('zones')}
-    //             >
-    //                 <MenuItem 
-    //                     icon="fa-circle" 
-    //                     label="Zone A"
-    //                     isActive={activeItem === 'zone-a'}
-    //                     onClick={() => setActiveItem('zone-a')}
-    //                 />
-    //                 <MenuItem 
-    //                     icon="fa-circle" 
-    //                     label="Zone B"
-    //                     isActive={activeItem === 'zone-b'}
-    //                     onClick={() => setActiveItem('zone-b')}
-    //                 />
-    //             </MenuItem>
-                
-    //             <MenuItem 
-    //                 icon="fa-chart-pie" 
-    //                 label="Analytics"
-    //                 isActive={activeItem === 'analytics'}
-    //                 onClick={() => setActiveItem('analytics')}
-    //             />
-                
-    //             <MenuItem 
-    //                 icon="fa-bell" 
-    //                 label="Alerts"
-    //                 isActive={activeItem === 'alerts'}
-    //                 onClick={() => setActiveItem('alerts')}
-    //             />
-                
-    //             <MenuItem 
-    //                 icon="fa-gear" 
-    //                 label="Settings"
-    //                 isActive={activeItem === 'settings'}
-    //                 onClick={() => setActiveItem('settings')}
-    //             />
-    //         </div>
-    //     );
-    // } catch (error) {
-    //     console.error('Sidebar component error:', error);
-    //     reportError(error);
-    //     return null;
-    // }
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);
