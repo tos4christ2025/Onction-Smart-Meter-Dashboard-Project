@@ -9,9 +9,9 @@ class AlertPanel extends React.Component {
         super(props);
         this.state = {
             alerts: [],
-            side_bar_width: "250px",
+            side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
             overflow: "overflow-scroll",
-            sidebarCollapsed: false,
+            sidebarCollapsed: window.innerWidth >= 768 ? false : true,
         };
     }
     componentDidMount() {
@@ -85,14 +85,14 @@ class AlertPanel extends React.Component {
     }
 }
 
-AlertPanel.propTypes = {
-    alerts: PropTypes.arrayOf(
-        PropTypes.shape({
-            type: PropTypes.oneOf(['warning', 'success']).isRequired,
-            title: PropTypes.string.isRequired,
-            message: PropTypes.string.isRequired
-        })
-    ).isRequired
-};
+// AlertPanel.propTypes = {
+//     alerts: PropTypes.arrayOf(
+//         PropTypes.shape({
+//             type: PropTypes.oneOf(['warning', 'success']).isRequired,
+//             title: PropTypes.string.isRequired,
+//             message: PropTypes.string.isRequired
+//         })
+//     ).isRequired
+// };
 
 export default withRouter(AlertPanel);

@@ -7,7 +7,6 @@ class Sidebar extends React.Component {
         super(props);
         this.state = {
             activeItem: 'dashboard',
-            route: '/dashboard',
         };
     }
     componentDidCatch(error, info) {
@@ -26,7 +25,7 @@ class Sidebar extends React.Component {
             side_bar_width,
             overflow,
         } = this.props;
-        //console.log(overflow)
+        
         return (
             <div
                 // style={{width: collapsed ? "4rem" : "15rem"}}
@@ -55,7 +54,10 @@ class Sidebar extends React.Component {
                         icon="fa-chart-line" 
                         label="Dashboard"
                         isActive={activeItem === 'dashboard'}
-                        onClick={() => {this.setState({ activeItem: 'dashboard' }); this.navigateToZone('/dashboard')}}
+                        onClick={() => {
+                            this.setState({ activeItem: 'dashboard' }); 
+                            this.navigateToZone('/dashboard')
+                        }}
                     />                
                     <MenuItem 
                         icon="fa-bolt" 
@@ -87,8 +89,8 @@ class Sidebar extends React.Component {
                         label="Availability"
                         isActive={activeItem === 'availability'}
                         onClick={() => {
-                            this.setState({ activeItem: 'availability' }); 
-                            this.navigateToZone('/availability')
+                            this.setState({ activeItem: 'availability' });   
+                            this.navigateToZone('/availability');
                         }}
                     >
                         <MenuItem 
@@ -97,7 +99,7 @@ class Sidebar extends React.Component {
                             isActive={activeItem === 'zone-a'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-a' }); 
-                                this.navigateToZone('/availability/zone-a/')
+                                this.navigateToZone('/availability/zone-a/');
                             }}
                         />
                         <MenuItem 
@@ -106,7 +108,7 @@ class Sidebar extends React.Component {
                             isActive={activeItem === 'zone-b'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-b' }); 
-                                this.navigateToZone('/availability/zone-b/')
+                                this.navigateToZone('/availability/zone-b/');
                             }}
                         />
                         <MenuItem 
@@ -115,7 +117,7 @@ class Sidebar extends React.Component {
                             isActive={activeItem === 'zone-c'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-c' }); 
-                                this.navigateToZone('/availability/zone-c/')
+                                this.navigateToZone('/availability/zone-c/');
                             }}
                         />
                     </MenuItem>

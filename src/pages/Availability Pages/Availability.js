@@ -13,9 +13,9 @@ class Availability extends Component {
       isLoading: true,
       error: null,
       selectedZone: "Zone A",
-      sidebarCollapsed: false,
+      sidebarCollapsed: window.innerWidth >= 768 ? false : true,
       viewMode: "daily", // hourly, daily, weekly
-      side_bar_width: "250px",
+      side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
       overflow: "overflow-scroll",
     };
   }

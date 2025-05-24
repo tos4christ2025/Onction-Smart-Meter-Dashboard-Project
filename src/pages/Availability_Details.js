@@ -10,13 +10,14 @@ class Availability_Details extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      sidebarVisible: window.innerWidth >= 768,
       data: null,
       isLoading: true,
       error: null,
       selectedZone: "Zone A",
-      sidebarCollapsed: false,
+      sidebarCollapsed: window.innerWidth >= 768 ? false : true,
       viewMode: "daily", // hourly, daily, weekly
-      side_bar_width: "250px",
+      side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
       overflow: "overflow-scroll",
     };
   }
@@ -62,6 +63,7 @@ class Availability_Details extends Component {
     const {
       sidebarCollapsed,
       viewMode,
+      sidebarVisible,
     } = this.state;
 
     if (isLoading) {
@@ -104,21 +106,21 @@ class Availability_Details extends Component {
     zones_chart_data.x_title = "Zones";
     return (
       <div className="dashboard-container" data-name="dashboard">
-          <Sidebar 
-          collapsed={sidebarCollapsed}
-          onToggleCollapse={this.toggleSidebar}
-          side_bar_width={this.state.side_bar_width}
-          overflow={this.state.overflow}
-          />
-
-          <div style={{marginLeft: this.state.side_bar_width}} className="w-full grid grid-cols-1  m-20" data-name="charts-grid">
+            <Sidebar 
+              collapsed={sidebarCollapsed}
+              onToggleCollapse={this.toggleSidebar}
+              side_bar_width={this.state.side_bar_width}
+              overflow={this.state.overflow}
+            />
+          <div style={{marginLeft: this.state.side_bar_width}} className="w-full grid grid-cols-1  mt-10 mb-10 mr-2" data-name="charts-grid">
+            {/* grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" data-name="summary-cards" */}
             <AvailabilityChart data={zones_chart_data} />
           </div>
           <Routes>
             {/* <Route path="/availability/:zoneId" element={<AvailabilityChart data={data} />} /> */}
             <Route path="/availability/:zoneId/*" element={<Availability data={data} />} />
           </Routes>
-        </div>
+      </div>
     );
   }
 }

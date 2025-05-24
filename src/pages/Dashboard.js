@@ -17,12 +17,12 @@ class Dashboard extends Component {
       isLoading: true,
       error: null,
       selectedZone: "Zone A",
-      sidebarCollapsed: false,
+      sidebarCollapsed: window.innerWidth >= 768 ? false : true,
       showUsageChart: true,
       showAlerts: true,
       showEnergyFlow: true,
       viewMode: "daily", // hourly, daily, weekly
-      side_bar_width: "250px",
+      side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
       overflow: "overflow-scroll",
     };
   }
@@ -113,7 +113,7 @@ class Dashboard extends Component {
           />
         {/* </div> */}
 
-        <div style={{marginLeft: this.state.side_bar_width}} className="main-content" data-name="main-content">    
+        <div style={{marginLeft: this.state.side_bar_width}} className="main-content grid grid-cols-1" data-name="main-content">    
           <DashboardHeader 
             totalUsage={data.totalUsage}
             savings={data.savings}

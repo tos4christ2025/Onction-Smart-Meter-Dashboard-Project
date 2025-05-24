@@ -17,7 +17,7 @@ class MenuItem extends Component {
                     <div
                         className={`menu-item ${isActive ? 'active' : ''} float-start`}
                         //  This controls hiding and showing the children
-                        onClick={() => {onClick(); this.setState({ showChildren: !this.state.showChildren })}}
+                        onClick={() => {onClick(); this.setState(prevState => { return {showChildren: !prevState.showChildren} })}}
                         data-name="menu-item"
                     >
                         <i className={`fas ${icon} mr-2`} data-name="menu-item-icon"></i>
