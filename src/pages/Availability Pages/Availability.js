@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Routes, Route } from 'react-router-dom';
 import { withRouter } from '../../utils/withRouter';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import AvailabilityChart from '../../components/Charts/AvailabilityChart';
@@ -60,7 +59,6 @@ class Availability extends Component {
     const { data, isLoading, error } = this.state;
     let { zoneId } = this.props.params;
     zoneId = zoneId.replace(/-/g, " ");
-    //console.log(zoneId, data);
     const {
       sidebarCollapsed,
       viewMode,
@@ -113,13 +111,9 @@ class Availability extends Component {
           side_bar_width={this.state.side_bar_width}
           overflow={this.state.overflow}
           />
-
           <div style={{marginLeft: this.state.side_bar_width}} className="w-full grid grid-cols-1  m-20" data-name="charts-grid">
             <AvailabilityChart data={zones_chart_data} />
           </div>
-          <Routes>
-            <Route path="/availability/:zoneId/details/:feederId/*" element={<AvailabilityChart data={data} />} />
-          </Routes>
         </div>
     );
   }

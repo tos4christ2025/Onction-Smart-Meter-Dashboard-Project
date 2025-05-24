@@ -120,18 +120,14 @@ class AvailabilityChart extends Component {
                             const element = elements[0];
                             const datasetIndex = element.datasetIndex;
                             const dataIndex = element.index;
-
                             const categoryLabel = chart.data.labels[dataIndex];
-                            const location = categoryLabel.toLowerCase().replace(/ /g, "-");
-                            // console.log(location)
+                            const location = categoryLabel.toLowerCase().replace(/ /g, "-");                            
                             const { pathname } = this.state;
+                            // console.log(location, pathname)
                             if(pathname == '/availability' && location !== pathname) {
                                 const newLocation = (pathname+'/'+location);
                                 this.navigateToZone(newLocation);
                             }
-                            //this.navigateToZone()
-                            // Perform the redirect here
-                            // console.log(categoryLabel);
                         }
                     }
                 }

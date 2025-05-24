@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Routes, Route } from 'react-router-dom';
 import { withRouter } from '../utils/withRouter';
 import Sidebar from '../components/Sidebar/Sidebar';
 import AvailabilityChart from '../components/Charts/AvailabilityChart';
 import { getMockData } from '../utils/dataUtils';
-import Availability from './Availability Pages/Availability';
 
 class Availability_Details extends Component {
   constructor(props) {
@@ -111,15 +109,10 @@ class Availability_Details extends Component {
               onToggleCollapse={this.toggleSidebar}
               side_bar_width={this.state.side_bar_width}
               overflow={this.state.overflow}
-            />
+            />            
           <div style={{marginLeft: this.state.side_bar_width}} className="w-full grid grid-cols-1  mt-10 mb-10 mr-2" data-name="charts-grid">
-            {/* grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" data-name="summary-cards" */}
             <AvailabilityChart data={zones_chart_data} />
           </div>
-          <Routes>
-            {/* <Route path="/availability/:zoneId" element={<AvailabilityChart data={data} />} /> */}
-            <Route path="/availability/:zoneId/*" element={<Availability data={data} />} />
-          </Routes>
       </div>
     );
   }
