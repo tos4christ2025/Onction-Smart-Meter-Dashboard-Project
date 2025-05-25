@@ -123,8 +123,8 @@ class AvailabilityChart extends Component {
                             const categoryLabel = chart.data.labels[dataIndex];
                             const location = categoryLabel.toLowerCase().replace(/ /g, "-");                            
                             const { pathname } = this.state;
-                            // console.log(location, pathname)
-                            if(pathname == '/availability' && location !== pathname) {
+                            console.log(location, pathname)
+                            if(pathname == '/dashboard/availability' && location !== pathname) {
                                 const newLocation = (pathname+'/'+location);
                                 this.navigateToZone(newLocation);
                             }
@@ -138,7 +138,7 @@ class AvailabilityChart extends Component {
     render() {
         try {
             return (
-                <div className="card ml-3" data-name="zone-comparison-chart">
+                <div className="card ml-3 w-full" data-name="zone-comparison-chart">
                     <canvas ref={this.chartRef} data-name="zone-comparison-canvas"></canvas>
                 </div>
             );

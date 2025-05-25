@@ -13,6 +13,13 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../src/styles/sidebar.css';
 import '../src/styles/index.css';
 import '../src/styles/main.css';
+import AlertPanelLayout from './routes/AlertsPanelLayout';
+import AlertPanelDetails from './routes/AlertsPanelDetails'
+import DashboardLayout from './routes/DashboardLayout';
+import DashboardOverview from './routes/DashboardOverview'; 
+import AvailabilityLayout from './routes/AvailabilityLayout';
+import AvailabilityOverview from './routes/AvailabilityOverview';
+import AvailabilityDetail from './routes/AvailabilityDetail';
 
 library.add(faCoffee, faUser);
 
@@ -40,12 +47,17 @@ class App extends React.Component {
     return (
       <Router>
         <div className="app" data-name="app">  
-          <Routes>                
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/alerts" element={<AlertPanel />} />
-              <Route path="/availability/*" element={<Availability_Details />} />
-              <Route path="/availability/:zoneId/*" element={<Availability />} />       
+          <Routes>
+              <Route path="/dashboard" element={<DashboardLayout />} >
+                <Route index element={<DashboardOverview />} />                
+                <Route path="availability" element={<AvailabilityLayout />} >
+                  <Route index element={<AvailabilityOverview />} />
+                  <Route path=":zoneId" element={<AvailabilityDetail />} />
+                </Route>
+                <Route path="alerts" element={<AlertPanelLayout />} >
+                  <Route index element={<AlertPanelDetails />} />
+                </Route>
+              </Route>              
           </Routes>
          </div>
       </Router>
