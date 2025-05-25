@@ -48,7 +48,7 @@ class App extends React.Component {
       <Router>
         <div className="app" data-name="app">  
           <Routes>
-              <Route path="/dashboard" element={<DashboardLayout />} >
+              <Route path="/" element={<DashboardLayout />} >
                 <Route index element={<DashboardOverview />} />                
                 <Route path="availability" element={<AvailabilityLayout />} >
                   <Route index element={<AvailabilityOverview />} />
