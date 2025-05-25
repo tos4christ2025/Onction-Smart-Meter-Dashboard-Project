@@ -123,8 +123,8 @@ class AvailabilityChart extends Component {
                             const categoryLabel = chart.data.labels[dataIndex];
                             const location = categoryLabel.toLowerCase().replace(/ /g, "-");                            
                             const { pathname } = this.state;
-                            console.log(location, pathname)
-                            if(pathname == '/dashboard/availability' && location !== pathname) {
+                            // console.log(location, pathname)
+                            if(pathname == '/availability' && location !== pathname) {
                                 const newLocation = (pathname+'/'+location);
                                 this.navigateToZone(newLocation);
                             }
