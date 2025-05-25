@@ -36,11 +36,11 @@ class Sidebar extends React.Component {
                 }`}
             >
                 <button
-                    style={{ position: "fixed", top: 10, left: 10 }}
+                    style={{ position: "fixed", top: 4, left: 4 }}
                     onClick={onToggleCollapse}
                     className="mb-4 text-sm bg-gray-300 px-2 py-1 rounded"
                     >
-                    {collapsed ? "▶" : "◀ Collapse"}
+                    {collapsed ? "▶" : "◀"}
                 </button>
 
                 {!collapsed && (<div className="" data-name="sidebar">
