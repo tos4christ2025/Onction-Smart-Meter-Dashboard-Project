@@ -26,8 +26,10 @@ library.add(faCoffee, faUser);
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.setSideBarWidth = this.setSideBarWidth.bind(this);
     this.state = {
       error: null,
+      side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
     };
   }
   componentDidMount() {
@@ -43,15 +45,18 @@ class App extends React.Component {
     console.error('Error caught in App:', error, info);
     reportError(error);
   }
+  setSideBarWidth(width) {
+      this.setState({side_bar_width: width});
+  }
   render() {
     return (
       <Router>
         <div className="app" data-name="app">  
           <Routes>
-              <Route path="/" element={<DashboardLayout />} >
+              <Route path="/" element={<DashboardLayout setSideBarWidth={this.setSideBarWidth} />} >
                 <Route path="dashboard" element={<DashboardOverview />} />                
                 <Route path="availability" element={<AvailabilityLayout />} >
-                  <Route index element={<AvailabilityOverview />} />
+                  <Route index element={<AvailabilityOverview side_bar_width={this.state.side_bar_width} />} />
                   <Route path=":zoneId" element={<AvailabilityDetail />} />
                 </Route>
                 <Route path="alerts" element={<AlertPanelLayout />} >

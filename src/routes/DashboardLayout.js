@@ -45,11 +45,16 @@ class DashboardLayout extends Component {
     }
   }
   toggleSidebar = () => {
-    this.setState((prevState) => ({ 
+    this.setState((prevState) => {
+      if(prevState.sidebarCollapsed) {
+        this.props.setSideBarWidth("250px");
+      } else this.props.setSideBarWidth("60px");
+      return ({ 
       sidebarCollapsed: !prevState.sidebarCollapsed,  
       side_bar_width: prevState.sidebarCollapsed ? "250px" : "60px",
       overflow: prevState.sidebarCollapsed ? "overflow-scroll" : "overflow-hidden-scroll",
-    }));
+    })
+  });
   };
 
   toggleSection = (section) => {
@@ -62,6 +67,9 @@ class DashboardLayout extends Component {
 
   reportError(err) {
     console.error('Dashboard error:', err);
+  }
+  setSideBarWidth() {
+      
   }
 
   render() {
@@ -114,7 +122,7 @@ class DashboardLayout extends Component {
             onSelectZone={(zone) => this.setState({ selectedZone: zone })}
           />
         {/* </div> */}
-        <main style={{marginLeft:{side_bar_width}}} className='dashboard-main w-full'>
+        <main  className='dashboard-main w-full'>
             <Outlet side_bar_width={side_bar_width} />
         </main>
       </div>
