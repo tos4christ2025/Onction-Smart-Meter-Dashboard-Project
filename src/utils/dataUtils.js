@@ -62,6 +62,47 @@ export const getMockData = () => {
                 { source: 0, target: 3, value: 15 },
                 { source: 0, target: 4, value: 5 }
             ]
+        },
+        availability: {
+            zones: ['Zone A', 'Zone B', 'Zone C'],
+            zones_avg_uptime: [20, 18, 23],
+            zones_avg_downtime: [4, 6, 1],
+            zones_data: [
+                {
+                    name: 'Zone A',
+                    status: 'available',
+                    lastChecked: '2023-10-01T12:00:00Z',
+                    feeders: {
+                        name: ['Feeder 1', 'Feeder 2'],
+                        status: ['available', 'available'],
+                        uptime: [20, 15],
+                        downtime: [4, 9], 
+                    }
+                },
+                {
+                    name: 'Zone B',
+                    status: 'unavailable',
+                    lastChecked: '2023-10-01T12:00:00Z',
+                    feeders: {
+                        name: ['Feeder 3', 'Feeder 4'],
+                        status: ['available', 'unavailable'],
+                        uptime: [22, 18],
+                        downtime: [2, 6], 
+                    }
+                },
+                {
+                    name: 'Zone C',
+                    status: 'available',
+                    lastChecked: '2023-10-01T12:00:00Z',
+                    feeders: {
+                        name: ['Feeder 5', 'Feeder 6'],
+                        status: ['available', 'available'],
+                        uptime: [10, 14],
+                        downtime: [14, 10], 
+                    }
+                }
+            ],
+            overallStatus: 'partially available'
         }
     };
 };

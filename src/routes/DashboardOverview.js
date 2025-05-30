@@ -9,7 +9,7 @@ import ZoneOverview from '../components/Dashboard/ZoneOverview';
 import DashboardHeader from '../components/Dashboard/DashboardHeader';
 import { getMockData } from '../utils/dataUtils';
 
-class Dashboard extends Component {
+class DashboardOverview extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -96,24 +96,7 @@ class Dashboard extends Component {
     if (!data) return null;
 
     return (
-      <div className="dashboard-container" data-name="dashboard">
-        {/* <div className="sidebar" data-name="sidebar"> */}
-          <Sidebar 
-          collapsed={sidebarCollapsed}
-          onToggleCollapse={this.toggleSidebar}
-          onToggleSection={this.toggleSection}
-          side_bar_width={this.state.side_bar_width}
-          overflow={this.state.overflow}
-          sections={{
-            showUsageChart,
-            showAlerts,
-            showEnergyFlow,
-          }}
-          onSelectZone={(zone) => this.setState({ selectedZone: zone })}
-          />
-        {/* </div> */}
-
-        <div style={{marginLeft: this.state.side_bar_width}} className="main-content grid grid-cols-1" data-name="main-content">    
+        <div style={{marginLeft: this.props.side_bar_width}} className="main-content grid grid-cols-1" data-name="main-content">    
           <DashboardHeader 
             totalUsage={data.totalUsage}
             savings={data.savings}
@@ -127,12 +110,9 @@ class Dashboard extends Component {
           </div>
 
           <EnergyFlowDiagram data={data.energyFlow} />
-
-          {/* <AlertPanel alerts={data.alerts} /> */}
         </div>
-      </div>
     );
   }
 }
 
-export default withRouter(Dashboard);
+export default withRouter(DashboardOverview);

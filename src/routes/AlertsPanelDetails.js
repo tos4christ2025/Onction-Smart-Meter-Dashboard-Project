@@ -1,62 +1,44 @@
 import React from 'react';
-import { withRouter } from "../../utils/withRouter";
+import { withRouter } from "../utils/withRouter";
 import PropTypes from 'prop-types';
-import Sidebar from '../Sidebar/Sidebar';
-import { getMockData } from '../../utils/dataUtils';
+import { getMockData } from '../utils/dataUtils';
 
 class AlertPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             alerts: [],
-            side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
-            overflow: "overflow-scroll",
-            sidebarCollapsed: window.innerWidth >= 768 ? false : true,
         };
     }
     componentDidMount() {
         // Fetch Alerts or perform any setup here
         this.fetchAlerts();
     }
-    fetchAlerts = async () => {
-        try {
-            const mockData = getMockData().alerts;
-            this.setState({ alerts: mockData });
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            // Handle error
-            // this.reportError(error);
-        }
-    };
+    
     componentDidCatch(error, info) {
         console.error('Error caught in AlertPanel:', error, info);
         // Handle error
         // this.reportError(error);
     }
-    toggleSidebar = () => {
-    this.setState((prevState) => ({ 
-      sidebarCollapsed: !prevState.sidebarCollapsed,  
-      side_bar_width: prevState.sidebarCollapsed ? "250px" : "60px",
-      overflow: prevState.sidebarCollapsed ? "overflow-scroll" : "overflow-hidden-scroll",
-    }));
-  };
+
+     async fetchAlerts() {
+        try {
+          this.setState({ isLoading: true });
+          const mockData = getMockData().alerts;
+          this.setState({ alerts: mockData });
+        } catch (err) {
+          this.setState({ error: err });
+          this.reportError(err);
+        } finally {
+          this.setState({ isLoading: false });
+        }
+      }
 
     render() {
-        const { alerts, side_bar_width, sidebarCollapsed, overflow } = this.state;
+        const { alerts } = this.state;
         try {
             return (
-                <>
-                <Sidebar 
-                    collapsed={sidebarCollapsed}
-                    onToggleCollapse={this.toggleSidebar}
-                    side_bar_width={side_bar_width}
-                    overflow={overflow}                    
-                />
-                <div style={{marginLeft: this.state.side_bar_width}} className="card" data-name="alert-panel">
-                    <h3 className="text-lg font-semibold mb-4" data-name="alert-title">
-                        <i className="fas fa-bell mr-2"></i>
-                        Recent Alerts
-                    </h3>
+                <>                
                     <div className="space-y-4" data-name="alert-list">
                         {alerts.map((alert, index) => (
                             <div 
@@ -73,9 +55,8 @@ class AlertPanel extends React.Component {
                                 </div>
                             </div>
                         ))}
-                    </div>
-                </div>
-            </>
+                    </div>                
+                </>
             );
         } catch (error) {
             console.error('AlertPanel component error:', error);

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Outlet } from 'react-router-dom';
 import { withRouter } from '../utils/withRouter';
 import Sidebar from '../components/Sidebar/Sidebar';
 import EnergyUsageChart from '../components/Charts/EnergyUsageChart';
@@ -9,7 +10,7 @@ import ZoneOverview from '../components/Dashboard/ZoneOverview';
 import DashboardHeader from '../components/Dashboard/DashboardHeader';
 import { getMockData } from '../utils/dataUtils';
 
-class Dashboard extends Component {
+class DashboardLayout extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,11 +45,16 @@ class Dashboard extends Component {
     }
   }
   toggleSidebar = () => {
-    this.setState((prevState) => ({ 
+    this.setState((prevState) => {
+      if(prevState.sidebarCollapsed) {
+        this.props.setSideBarWidth("250px");
+      } else this.props.setSideBarWidth("60px");
+      return ({ 
       sidebarCollapsed: !prevState.sidebarCollapsed,  
       side_bar_width: prevState.sidebarCollapsed ? "250px" : "60px",
       overflow: prevState.sidebarCollapsed ? "overflow-scroll" : "overflow-hidden-scroll",
-    }));
+    })
+  });
   };
 
   toggleSection = (section) => {
@@ -62,6 +68,9 @@ class Dashboard extends Component {
   reportError(err) {
     console.error('Dashboard error:', err);
   }
+  setSideBarWidth() {
+      
+  }
 
   render() {
     const { data, isLoading, error } = this.state;
@@ -72,6 +81,7 @@ class Dashboard extends Component {
       showAlerts,
       showEnergyFlow,
       viewMode,
+      side_bar_width,
     } = this.state;
 
     if (isLoading) {
@@ -99,40 +109,26 @@ class Dashboard extends Component {
       <div className="dashboard-container" data-name="dashboard">
         {/* <div className="sidebar" data-name="sidebar"> */}
           <Sidebar 
-          collapsed={sidebarCollapsed}
-          onToggleCollapse={this.toggleSidebar}
-          onToggleSection={this.toggleSection}
-          side_bar_width={this.state.side_bar_width}
-          overflow={this.state.overflow}
-          sections={{
-            showUsageChart,
-            showAlerts,
-            showEnergyFlow,
-          }}
-          onSelectZone={(zone) => this.setState({ selectedZone: zone })}
+            collapsed={sidebarCollapsed}
+            onToggleCollapse={this.toggleSidebar}
+            onToggleSection={this.toggleSection}
+            side_bar_width={side_bar_width}
+            overflow={this.state.overflow}
+            sections={{
+              showUsageChart,
+              showAlerts,
+              showEnergyFlow,
+            }}
+            onSelectZone={(zone) => this.setState({ selectedZone: zone })}
           />
         {/* </div> */}
-
-        <div style={{marginLeft: this.state.side_bar_width}} className="main-content grid grid-cols-1" data-name="main-content">    
-          <DashboardHeader 
-            totalUsage={data.totalUsage}
-            savings={data.savings}
-          />
-
-          <ZoneOverview zones={data.zones} />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" data-name="charts-grid">
-            <EnergyUsageChart data={data.energyUsage} />
-            <ZoneComparisonChart data={data.zoneComparison} />
-          </div>
-
-          <EnergyFlowDiagram data={data.energyFlow} />
-
-          {/* <AlertPanel alerts={data.alerts} /> */}
-        </div>
+        <main  className='dashboard-main w-full'>
+            <Outlet side_bar_width={side_bar_width} />
+        </main>
       </div>
     );
   }
 }
 
-export default withRouter(Dashboard);
+// export default withRouter(DashboardLayout);
+export default DashboardLayout;
