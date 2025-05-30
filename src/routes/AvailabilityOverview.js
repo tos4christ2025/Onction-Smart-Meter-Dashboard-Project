@@ -52,12 +52,13 @@ class Availability_Details extends Component {
       .then(res => res.json())
       .then( response => {
         const { data } = response;
-        if(data?.length > 0) {
-          const filtered_data = data.filter( data => {
-            return feeder_ids.includes(data.id);
-          });
-          console.log(filtered_data, "  the filtered data");
-        }        
+        console.log(response, "  the response data");
+        // if(data?.length > 0) {
+        //   const filtered_data = data.filter( data => {
+        //     return feeder_ids.includes(data.id);
+        //   });
+        //   console.log(filtered_data, "  the filtered data");
+        // }
       });
       const mockData = getMockData().availability;
       this.setState({ data: mockData });
