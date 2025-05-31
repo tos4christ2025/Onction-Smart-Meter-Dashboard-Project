@@ -96,7 +96,7 @@ class DashboardOverview extends Component {
     if (!data) return null;
 
     return (
-        <div style={{marginLeft: this.props.side_bar_width}} className="main-content grid grid-cols-1" data-name="main-content">    
+        <div style={{marginLeft: this.props.side_bar_width}} className="main-content grid grid-cols-1 overflow-auto" data-name="main-content">    
           <DashboardHeader 
             totalUsage={data.totalUsage}
             savings={data.savings}

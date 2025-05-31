@@ -67,7 +67,7 @@ class Sidebar extends React.Component {
                     >
                         <MenuItem 
                             icon="fa-circle" 
-                            label="Zone A"
+                            label="Bauchi"
                             isActive={activeItem === 'zone-a'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-a' }); 
@@ -76,7 +76,7 @@ class Sidebar extends React.Component {
                         />
                         <MenuItem 
                             icon="fa-circle" 
-                            label="Zone B"
+                            label="Gombe"
                             isActive={activeItem === 'zone-b'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-b' }); 
@@ -95,7 +95,7 @@ class Sidebar extends React.Component {
                     >
                         <MenuItem 
                             icon="fa-circle" 
-                            label="Zone A"
+                            label="Bauchi"
                             isActive={activeItem === 'zone-a'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-a' }); 
@@ -104,7 +104,7 @@ class Sidebar extends React.Component {
                         />
                         <MenuItem 
                             icon="fa-circle" 
-                            label="Zone B"
+                            label="Gombe"
                             isActive={activeItem === 'zone-b'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-b' }); 
@@ -113,7 +113,7 @@ class Sidebar extends React.Component {
                         />
                         <MenuItem 
                             icon="fa-circle" 
-                            label="Zone C"
+                            label="Makari Jos"
                             isActive={activeItem === 'zone-c'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-c' }); 
