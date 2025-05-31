@@ -99,7 +99,7 @@ class Sidebar extends React.Component {
                             isActive={activeItem === 'zone-a'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-a' }); 
-                                this.navigateToZone('availability/zone-a/');
+                                // this.navigateToZone('availability/zone-a/');
                             }}
                         />
                         <MenuItem 
@@ -108,7 +108,7 @@ class Sidebar extends React.Component {
                             isActive={activeItem === 'zone-b'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-b' }); 
-                                this.navigateToZone('availability/zone-b/');
+                                // this.navigateToZone('availability/zone-b/');
                             }}
                         />
                         <MenuItem 
@@ -117,7 +117,7 @@ class Sidebar extends React.Component {
                             isActive={activeItem === 'zone-c'}
                             onClick={() => {
                                 this.setState({ activeItem: 'zone-c' }); 
-                                this.navigateToZone('availability/zone-c/');
+                                // this.navigateToZone('availability/zone-c/');
                             }}
                         />
                     </MenuItem>

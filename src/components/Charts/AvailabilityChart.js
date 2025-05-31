@@ -181,7 +181,7 @@ class AvailabilityChart extends Component {
                             // console.log(location, pathname)
                             if(pathname == '/availability' && location !== pathname) {
                                 const newLocation = (pathname+'/'+location);
-                                alert("This is the new location  ", newLocation);
+                                // alert("This is the new location  ", newLocation);
                                 // this.navigateToZone(newLocation);
                             }
                         }
