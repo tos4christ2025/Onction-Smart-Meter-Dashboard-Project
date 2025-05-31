@@ -118,7 +118,7 @@ class Availability_Overview extends Component {
       this.setState({ error: err });
       this.reportError(err);
     } finally {
-      this.setState({ isLoading: false });
+      // this.setState({ isLoading: false });
     }
   }
   toggleSidebar = () => {
@@ -148,6 +148,7 @@ class Availability_Overview extends Component {
 
   render() {
     const { isLoading, error, showText, complete_data } = this.state;
+    console.log(isLoading, "  this is Loading")
     const { selectedZone } = this.state;
     const uniqueZones = ["All", ...new Set(complete_data?.map((d) => d.zone))];
     // const { sidebarCollapsed, viewMode, sidebarVisible, } = this.state;
@@ -157,14 +158,14 @@ class Availability_Overview extends Component {
     });
     if (isLoading) {
       return (
-        <div className="flex justify-center items-center h-screen" data-name="loading">
+        <div style={{width: "50%", margin: "0 auto"}}  className="flex justify-center items-center h-screen" data-name="loading">
           <i className="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
         </div>
       );
     }
     if (error) {
       return (
-        <div className="flex justify-center items-center h-screen text-red-500" data-name="error">
+        <div style={{width: "50%", margin: "0 auto"}} className="flex justify-center items-center h-screen text-red-500" data-name="error">
           <div className="text-center">
             <i className="fas fa-exclamation-triangle fa-3x mb-4"></i>
             <p>Error loading dashboard data</p>
@@ -177,19 +178,19 @@ class Availability_Overview extends Component {
     return (
       <div  className="dashboard-container" data-name="dashboard">
           <div style={{marginLeft: this.props.side_bar_width}} className="flex h-screen">
-            <div style={{zIndex: 1}} className="flex-2 p-5 bg-gray-50 overflow-auto">
+            <div style={{zIndex: 1}} className="flex-2 p-5 bg-white-50 overflow-auto">
               <ZoneSidebar
                 zones={uniqueZones}
                 selectedZone={selectedZone}
                 onZoneChange={this.handleZoneChange}
               />
               <span>
-                <button onClick={this.showComponent} className=" text-sm bg-gray-300 mb-10 p-2 rounded">
-                  {showText}
+                <button onClick={this.showComponent} className=" text-sm bg-gray-300 mt-2 p-2 rounded">
+                  <p style={{color: "purple"}} className="p-1 rounded">{showText}</p>
                 </button>
               </span>
             </div>
-          {this.state.showTable && (<div className="flex-1 p-5 bg-gray-50 overflow-auto">
+          {this.state.showTable && (<div className="flex-1 p-5 bg-white-50 overflow-auto">
               <h1 className="text-2xl font-bold mb-4">
                 Power Monitoring Dashboard {selectedZone ? `- ${selectedZone}` : ""}
               </h1>

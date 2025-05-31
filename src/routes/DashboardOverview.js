@@ -76,7 +76,7 @@ class DashboardOverview extends Component {
 
     if (isLoading) {
       return (
-        <div className="flex justify-center items-center h-screen" data-name="loading">
+        <div style={{width: "50%", margin: "0 auto"}} className="flex justify-center items-center h-screen" data-name="loading">
           <i className="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
         </div>
       );
@@ -84,7 +84,7 @@ class DashboardOverview extends Component {
 
     if (error) {
       return (
-        <div className="flex justify-center items-center h-screen text-red-500" data-name="error">
+        <div style={{width: "50%", margin: "0 auto"}} className="flex justify-center items-center h-screen text-red-500" data-name="error">
           <div className="text-center">
             <i className="fas fa-exclamation-triangle fa-3x mb-4"></i>
             <p>Error loading dashboard data</p>
