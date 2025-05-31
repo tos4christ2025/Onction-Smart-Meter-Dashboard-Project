@@ -49,14 +49,15 @@ class Availability_Overview extends Component {
     this.fetchAvailability();
     setInterval(() => {
       this.fetchAvailability();
-    }, 60000);    
+    }, 300000);    
   }
   handleZoneChange = (zone) => {
     this.setState({ selectedZone: zone });
   };
   async fetchAvailability() {
     try {
-      // this.setState({ isLoading: true });
+      this.setState({ isLoading: true });
+      console.log(" I am activated again")
       const complete_data = [];
       const url = `https://feedercomplianceprodapi.azurewebsites.net/api/v1/Energy/feeder-online-data?apiKey=${process.env.REACT_APP_POWERTECH_API_KEY}`;
       fetch(url, {
@@ -105,7 +106,8 @@ class Availability_Overview extends Component {
             });
           })          
         }
-        this.setState({complete_data})
+        this.setState({complete_data});
+        this.setState({ error: null });
       })
       .catch(err => {
         this.setState({ error: err });
@@ -148,7 +150,6 @@ class Availability_Overview extends Component {
 
   render() {
     const { isLoading, error, showText, complete_data } = this.state;
-    console.log(isLoading, "  this is Loading")
     const { selectedZone } = this.state;
     const uniqueZones = ["All", ...new Set(complete_data?.map((d) => d.zone))];
     // const { sidebarCollapsed, viewMode, sidebarVisible, } = this.state;
@@ -156,23 +157,23 @@ class Availability_Overview extends Component {
     uniqueZones.forEach(zone => {
       if(zone !== 'All') complete_chart_data[zone] = complete_data?.filter( data => data.zone == zone);
     });
-    if (isLoading) {
-      return (
-        <div style={{width: "50%", margin: "0 auto"}}  className="flex justify-center items-center h-screen" data-name="loading">
-          <i className="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
-        </div>
-      );
-    }
-    if (error) {
-      return (
-        <div style={{width: "50%", margin: "0 auto"}} className="flex justify-center items-center h-screen text-red-500" data-name="error">
-          <div className="text-center">
-            <i className="fas fa-exclamation-triangle fa-3x mb-4"></i>
-            <p>Error loading dashboard data</p>
-          </div>
-        </div>
-      );
-    }
+    // if (isLoading) {
+    //    (
+    //     <div style={{width: "50%", margin: "0 auto"}}  className="flex justify-center items-center h-screen" data-name="loading">
+    //       <i className="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
+    //     </div>
+    //   );
+    // }
+    // if (error) {
+    //    (
+    //     <div style={{width: "50%", margin: "0 auto"}} className="flex justify-center items-center h-screen text-red-500" data-name="error">
+    //       <div className="text-center">
+    //         <i className="fas fa-exclamation-triangle fa-3x mb-4"></i>
+    //         <p>Error loading dashboard data</p>
+    //       </div>
+    //     </div>
+    //   );
+    // }
     if (!complete_data) return null;
   
     return (
@@ -189,17 +190,35 @@ class Availability_Overview extends Component {
                   <p style={{color: "purple"}} className="p-1 rounded">{showText}</p>
                 </button>
               </span>
+
+              {isLoading && 
+                (
+                  <div style={{width: "50%", margin: "0 auto"}}  className="flex justify-center items-center" data-name="loading">
+                    <i className="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
+                  </div>
+                )
+              }
+              {error && 
+                (
+                  <div style={{width: "50%", margin: "0 auto"}} className="flex justify-center items-center text-red-500" data-name="error">
+                    <div className="text-center">
+                      <i className="fas fa-exclamation-triangle fa-3x mb-4"></i>
+                      <p>Error loading dashboard data</p>
+                    </div>
+                  </div>
+                )                    
+              }
+            </div>          
+            {this.state.showTable && (<div className="flex-1 p-5 bg-white-50 overflow-auto">
+                <h1 className="text-2xl font-bold mb-4">
+                  Power Monitoring Dashboard {selectedZone ? `- ${selectedZone}` : ""}
+                </h1>
+                <PowerDataTable data={complete_data} selectedZone={selectedZone} />
+              </div>)}
             </div>
-          {this.state.showTable && (<div className="flex-1 p-5 bg-white-50 overflow-auto">
-              <h1 className="text-2xl font-bold mb-4">
-                Power Monitoring Dashboard {selectedZone ? `- ${selectedZone}` : ""}
-              </h1>
-              <PowerDataTable data={complete_data} selectedZone={selectedZone} />
+            {this.state.showChart && (<div className="flex-1 w-full grid grid-cols-1  mt-10 mb-10 mr-2" data-name="charts-grid">
+              <AvailabilityChart complete_chart_data={complete_chart_data} selectedZone={selectedZone} />
             </div>)}
-          </div>
-          {this.state.showChart && (<div className="flex-1 w-full grid grid-cols-1  mt-10 mb-10 mr-2" data-name="charts-grid">
-            <AvailabilityChart complete_chart_data={complete_chart_data} selectedZone={selectedZone} />
-          </div>)}
       </div>
     );
   }
