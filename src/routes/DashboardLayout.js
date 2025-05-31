@@ -122,8 +122,8 @@ class DashboardLayout extends Component {
             onSelectZone={(zone) => this.setState({ selectedZone: zone })}
           />
         {/* </div> */}
-        <main  className='dashboard-main w-full'>
-            <Outlet side_bar_width={side_bar_width} />
+        <main  className='dashboard-main w-full' data-name="dashboard">
+            <Outlet />
         </main>
       </div>
     );

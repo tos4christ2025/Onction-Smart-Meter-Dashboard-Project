@@ -54,7 +54,7 @@ class App extends React.Component {
         <div className="app" data-name="app">  
           <Routes>
               <Route exact path="/" element={<DashboardLayout setSideBarWidth={this.setSideBarWidth} />} >
-                <Route path="dashboard" element={<DashboardOverview />} />                
+                <Route path="dashboard" element={<DashboardOverview side_bar_width={this.state.side_bar_width} />} />                
                 <Route path="availability" element={<AvailabilityLayout />} >
                   <Route index element={<AvailabilityOverview side_bar_width={this.state.side_bar_width} />} />
                   <Route path=":zoneId" element={<AvailabilityDetail />} />
