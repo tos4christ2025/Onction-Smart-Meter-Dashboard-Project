@@ -1,46 +1,63 @@
 import React, { Component } from 'react';
 import { withRouter } from '../utils/withRouter';
-import { Outlet } from 'react-router-dom';
+// import { Outlet } from 'react-router-dom';
 import AvailabilityChart from '../components/Charts/AvailabilityChart';
-import { getMockData } from '../utils/dataUtils';
 import { ZoneSidebar } from '../components/Sidebar/ZoneSidebar';
 import { PowerDataTable } from '../components/Tables/PowerTable_Zones';
 
-const feeder_ids = [728, 807, 736, 751, 772, 765, 806, 813, 815, 733, 808, 727, 739, 773, 743, 826, 816, 774, 770, 752, 754, 747, 748, 794];
+let feeder_ids = [728, 807, 736, 751, 772, 765, 806, 813, 815, 733, 808, 727, 739, 773, 743, 826, 816, 774, 770, 752, 754, 747, 748, 794];
+let trading_point_to_feederId = {
+  "GRA/PALACE" : [{name: "GRA/PALACE", feederId: 765, zone: "Bauchi"}], 
+  "GUBI" : [{name: "GUBI DAM", feederId: 770, zone: "Bauchi"}, {name: "TEACHING HOSPITAL", feederId: 773, zone: "Bauchi"}, {name: "WUNTI ROAD", feederId:	774, zone: "Bauchi"}],
+  "ASHAKA" : [{name: "ASHAKA", feederId: 747, zone: "Gombe"}], 
+  "SHONGO": [{name: "GOVT. HOUSE GOMBE", feederId: 751, zone: "Gombe"}, {name: "TUNFURE", feederId: 743, zone: "Gombe"}], 
+  "FMC" : [{name: "FMC", feederId: 736, zone: "Gombe"}], 
+  "GOMBE TOWN" : [{name: "GRA GOMBE", feederId: 772, zone: "Gombe"}],
+  "MAKERI" : [{name: "COCA COLA", feederId:	807, zone: "Makari Jos"}, {name: "NASCO", feederId: 808, zone: "Makari Jos"}, {name: "INDUSTRIAL JOS", feederId:	806, zone: "Makari Jos"}, {name: "MAKERI", feederId: 733, zone: "Makari Jos"}], 
+  "NEW GOVT. HOUSE JOS" : [{name: "NEW GOVT. HOUSE JOS", feederId: 727, zone: "Makari Jos"}], 
+  "SECRETARIAT" : [{name: "IBRAHIM TAIWO", feederId: 813, zone: "Makari Jos"}, {name: "LIBERTY DAM", feederId: 815, zone: "Makari Jos"}, {name: "SECRETARIAT", feederId: 739, zone: "Makari Jos"}], 
+  "BUKURU" : [{name: "BUKURU", feederId: 728, zone: "Makari Jos"}],
+  "ANGLO JOS" : [{name: "WEST OF MINES", feederId: 816, zone: "Zaria Road Jos"}], 
+  "DOGON DUTSE" : [{name: "UNIJOS", feederId: 826, zone: "Zaria Road Jos"}],
+  "BCC I" : [{name: "BCC I", feederId:	752, zone: "Yandev Gboko"}], 
+  "BCC II" : [{name: "BCC II", feederId: 754, zone: "Yandev Gboko"}]
+}
 
-
-class Availability_Details extends Component {
+class Availability_Overview extends Component {
   constructor(props) {
     super(props);
     this.showComponent = this.showComponent.bind(this);
+    this.fetchAvailability = this.fetchAvailability.bind(this);
     this.state = {
       sidebarVisible: window.innerWidth >= 768,
       data: null,
+      complete_data: null,
       isLoading: true,
       error: null,
-      selectedZone: "Zone A",
       sidebarCollapsed: window.innerWidth >= 768 ? false : true,
       viewMode: "daily", // hourly, daily, weekly
       side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
       overflow: "overflow-scroll",
       selectedZone: null,
-      showTable: false,
-      showText: "Show Table",
-      showChart: true
+      showTable: true,
+      showText: "Show Chart",
+      showChart: false
     };
   }
 
   componentDidMount() {
     this.fetchAvailability();
+    setInterval(() => {
+      this.fetchAvailability();
+    }, 60000);    
   }
-
   handleZoneChange = (zone) => {
     this.setState({ selectedZone: zone });
   };
-
   async fetchAvailability() {
     try {
       this.setState({ isLoading: true });
+      const complete_data = [];
       const url = `https://feedercomplianceprodapi.azurewebsites.net/api/v1/Energy/feeder-online-data?apiKey=${process.env.REACT_APP_POWERTECH_API_KEY}`;
       fetch(url, {
         method: "GET",
@@ -52,16 +69,51 @@ class Availability_Details extends Component {
       .then(res => res.json())
       .then( response => {
         const { data } = response;
-        // console.log(response, "  the response data");
         if(data?.length > 0) {
           const filtered_data = data.filter( data => {
             return feeder_ids.includes(data.feederId);
           });
-          console.log(filtered_data, "  the filtered data");
+          // Build an Array of Objects from the returned data with needed keys
+          // Iterate over trading_point_to_feederId to get the feederId in order to get the proper
+          // trading_point and zone
+          const trading_point_to_feederId_keys = Object.keys(trading_point_to_feederId);
+          // Iterate over the trading point keys to filter each feeder's Id from the filtered data  
+          trading_point_to_feederId_keys.forEach( tp_keys => {
+            // Get the array containing objects of feeders under this particular trading point
+            const tp_feeders_array = trading_point_to_feederId[tp_keys];
+            // Iterate over the trading point feeders array to perform operations on each feeders
+            tp_feeders_array.forEach(tp_feeder => {
+              // feederId = tp_feeder.feederId == use this to filter for data from the backend
+              // Filter the data for this particular trading point feeder with its feederId matched to the
+              // filtered data from the backend
+              const feeder_data = filtered_data.filter( f_data => f_data.feederId == tp_feeder.feederId);
+              // Create a temporary object that will hold the computed data for this particular feeder
+              // and push the data to complete_data array which will then be used to set state
+              const temp_object = {};
+              const temp_feeder_zone = tp_feeder.zone;
+              temp_object.zone = temp_feeder_zone;
+              temp_object.trading_point = tp_keys;
+              temp_object.name = feeder_data[0].name;
+              temp_object.date = new Date().toLocaleDateString();
+              temp_object.time = new Date().getHours() + ":" + new Date().getMinutes();
+              temp_object.megawatts = feeder_data[0].power;
+              temp_object.voltage = feeder_data[0].voltage1;
+              temp_object.amperes = feeder_data[0].current1;
+              temp_object.feederStatus = Number(feeder_data[0].status) == 1 ? "ON" : "OFF";
+              temp_object.uptime = feeder_data[0].upTimeHours;              
+              complete_data.push(temp_object);              
+            });
+          })          
         }
+        this.setState({complete_data})
+      })
+      .catch(err => {
+        this.setState({ error: err });
+        this.reportError(err);
+      })
+      .finally(() => {
+        this.setState({ isLoading: false });
       });
-      const mockData = getMockData().availability;
-      this.setState({ data: mockData });
     } catch (err) {
       this.setState({ error: err });
       this.reportError(err);
@@ -76,66 +128,33 @@ class Availability_Details extends Component {
       overflow: prevState.sidebarCollapsed ? "overflow-scroll" : "overflow-hidden-scroll",
     }));
   };
-
   handleViewModeChange = (mode) => {
     this.setState({ viewMode: mode });
   };
-
   reportError(err) {
     console.error('Dashboard error:', err);
-  }
-
+  };
   navigateToZone = (link) => {
     this.props.navigate(link);
-  }
+  };
   showComponent() {
-    const {showChart, showTable, showText} = this.state;
+    const {showChart, showTable} = this.state;
     if(showChart) {
       this.setState({showChart: false, showTable: true, showText: "Show Chart"});
     } else if(showTable) {
       this.setState({showChart: true, showTable: false, showText: "Show Table"});
     }
-  }
+  };
 
   render() {
-    const { data, isLoading, error, showText } = this.state;
-    const current_zones = ["Bauchi", "Gombe", "Makari Jos", "Zaria Road Jos", " Yandev Gboko"];
-    const Zones = [
-      {zone: "Bauchi", trading_point: "GRA/PALACE", name: "GRA/PALACE", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Bauchi", trading_point: "GUBI", name: "GUBI DAM", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Bauchi", trading_point: "GUBI", name: "TEACHING HOSPITAL", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Bauchi", trading_point: "GUBI", name: "WUNTI ROAD", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Gombe", trading_point: "ASHAKA", name: "ASHAKA", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Gombe", trading_point: "SHONGO", name: "GOVT. HOUSE GOMBE", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Gombe", trading_point: "SHONGO", name: "TUNFURE", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Gombe", trading_point: "FMC", name: "FMC", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Gombe", trading_point: "GOMBE TOWN", name: "GRA GOMBE", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "MAKERI", name: "COCA COLA", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "MAKERI", name: "NASCO", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "MAKERI", name: "INDUSTRIAL JOS", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "MAKERI", name: "MAKERI", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "NEW GOVT. HOUSE JOS", name: "GURA TOP/MAZ.", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "NEW GOVT. HOUSE JOS", name: "NEW GOVT. HOUSE JOS", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "NEW GOVT. HOUSE JOS", name: "RAYFIELD", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "SECRETARIAT", name: "IBRAHIM TAIWO", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "SECRETARIAT", name: "LIBERTY DAM", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "SECRETARIAT", name: "SECRETARIAT", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "BUKURU", name: "BUKURU", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Makari Jos",  trading_point: "BUKURU", name: "NVRI", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
-      {zone: "Zaria Road Jos", trading_point: "ANGLO JOS", name: "RANTYA", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Zaria Road Jos", trading_point: "ANGLO JOS", name: "STATE LOWCOST", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Zaria Road Jos", trading_point: "ANGLO JOS", name: "TAFAWA BALEWA", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Zaria Road Jos", trading_point: "ANGLO JOS", name: "WEST OF MINES", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Zaria Road Jos", trading_point: "ANGLO JOS", name: "MURTALA MOHAMMED", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Zaria Road Jos", trading_point: "DOGON DUTSE", name: "UNIJOS DEDICATED", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "OFF", uptime: 12}, 
-      {zone: "Yandev Gboko", trading_point: "BCC I", name: "BCC I", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12},
-      {zone: "Yandev Gboko", trading_point: "BCC II", name: "BCC II", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}
-    ];
-
+    const { isLoading, error, showText, complete_data } = this.state;
     const { selectedZone } = this.state;
-    const uniqueZones = ["All", ...new Set(Zones.map((d) => d.zone))];
-    const { sidebarCollapsed, viewMode, sidebarVisible, } = this.state;
-
+    const uniqueZones = ["All", ...new Set(complete_data?.map((d) => d.zone))];
+    // const { sidebarCollapsed, viewMode, sidebarVisible, } = this.state;
+    const complete_chart_data = {}
+    uniqueZones.forEach(zone => {
+      if(zone !== 'All') complete_chart_data[zone] = complete_data?.filter( data => data.zone == zone);
+    });
     if (isLoading) {
       return (
         <div className="flex justify-center items-center h-screen" data-name="loading">
@@ -143,7 +162,6 @@ class Availability_Details extends Component {
         </div>
       );
     }
-
     if (error) {
       return (
         <div className="flex justify-center items-center h-screen text-red-500" data-name="error">
@@ -154,30 +172,12 @@ class Availability_Details extends Component {
         </div>
       );
     }
-
-    if (!data) return null;
-    const zones_chart_data = {}
-    const datasets = [
-                        {
-                            label: 'Uptime',
-                            data: data.zones_avg_uptime,
-                            backgroundColor: '#3b82f6'
-                        },
-                        {
-                            label: 'Downtime',
-                            data: data.zones_avg_downtime,
-                            backgroundColor: '#3b34f6'
-                        }
-                    ];
-    zones_chart_data.datasets = datasets;
-    zones_chart_data.labels = data.zones;
-    zones_chart_data.title = "Zone Availability";
-    zones_chart_data.y_title = "Hours (hrs)";
-    zones_chart_data.x_title = "Zones";
+    if (!complete_data) return null;
+  
     return (
       <div  className="dashboard-container" data-name="dashboard">
           <div style={{marginLeft: this.props.side_bar_width}} className="flex h-screen">
-            <div className="flex-2 p-5 bg-gray-50 overflow-auto">
+            <div style={{zIndex: 1}} className="flex-2 p-5 bg-gray-50 overflow-auto">
               <ZoneSidebar
                 zones={uniqueZones}
                 selectedZone={selectedZone}
@@ -189,20 +189,19 @@ class Availability_Details extends Component {
                 </button>
               </span>
             </div>
-            
-            {this.state.showTable && (<div className="flex-1 p-5 bg-gray-50 overflow-auto">
+          {this.state.showTable && (<div className="flex-1 p-5 bg-gray-50 overflow-auto">
               <h1 className="text-2xl font-bold mb-4">
                 Power Monitoring Dashboard {selectedZone ? `- ${selectedZone}` : ""}
               </h1>
-              <PowerDataTable data={Zones} selectedZone={selectedZone} />
+              <PowerDataTable data={complete_data} selectedZone={selectedZone} />
             </div>)}
           </div>
           {this.state.showChart && (<div className="flex-1 w-full grid grid-cols-1  mt-10 mb-10 mr-2" data-name="charts-grid">
-            <AvailabilityChart data={zones_chart_data} />
+            <AvailabilityChart complete_chart_data={complete_chart_data} selectedZone={selectedZone} />
           </div>)}
       </div>
     );
   }
 }
 
-export default withRouter(Availability_Details);
+export default withRouter(Availability_Overview);

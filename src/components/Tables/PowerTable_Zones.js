@@ -5,7 +5,7 @@ export class PowerDataTable extends Component {
         super(props);
         this.state = {
         currentPage: 1,
-        itemsPerPage: 5,
+        itemsPerPage: 7,
         filter: "All",
         };
     }
@@ -14,11 +14,9 @@ export class PowerDataTable extends Component {
         currentPage: direction === "next" ? prevState.currentPage + 1 : prevState.currentPage - 1,
         }));
     };
-
     handleFilterChange = (event) => {
         this.setState({ filter: event.target.value, currentPage: 1 });
     };
-
     exportToCSV = () => {
         const { data } = this.props;
         const header = "Date,Time,Megawatts,Voltage,Amperes,Feeder Status\n";
@@ -35,7 +33,7 @@ export class PowerDataTable extends Component {
     };
     renderStatusBadge(status) {
         const style =
-        status.toLowerCase() === "online"
+        status.toLowerCase() === "on"
             ? "bg-green-100 text-green-700"
             : "bg-red-100 text-red-700";
         return (
@@ -54,10 +52,6 @@ export class PowerDataTable extends Component {
         } else {
             filteredData = selectedZone ? data.filter((d) => d.zone === selectedZone) : data;
         }
-        
-        // const filteredData2 =
-        // filter === "All" ? data : data.filter((d) => d.feederStatus === filter);
-
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
         const start = (currentPage - 1) * itemsPerPage;
         const visibleData = filteredData.slice(start, start + itemsPerPage);
@@ -99,25 +93,25 @@ export class PowerDataTable extends Component {
                 </table>
             </div>
             <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
-            </span>
-            <div className="space-x-2">
-                <button
-                onClick={() => this.handlePageChange("prev")}
-                disabled={currentPage === 1}
-                className="px-3 py-1 border rounded text-sm disabled:opacity-50"
-                >
-                Prev
-                </button>
-                <button
-                onClick={() => this.handlePageChange("next")}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded text-sm disabled:opacity-50"
-                >
-                Next
-                </button>
-            </div>
+                <span className="text-sm text-gray-600">
+                    Page {currentPage} of {totalPages}
+                </span>
+                <div className="space-x-2">
+                    <button
+                    onClick={() => this.handlePageChange("prev")}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 border rounded text-sm disabled:opacity-50"
+                    >
+                    Prev
+                    </button>
+                    <button
+                    onClick={() => this.handlePageChange("next")}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 border rounded text-sm disabled:opacity-50"
+                    >
+                    Next
+                    </button>
+                </div>
             </div>
         </>
         );

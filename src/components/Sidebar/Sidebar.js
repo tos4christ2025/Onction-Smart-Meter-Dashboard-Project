@@ -6,7 +6,7 @@ class Sidebar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeItem: 'dashboard',
+            activeItem: '',
         };
     }
     componentDidCatch(error, info) {
@@ -29,7 +29,7 @@ class Sidebar extends React.Component {
         return (
             <div
                 // style={{width: collapsed ? "4rem" : "15rem"}}
-                style={{width: side_bar_width}}
+                style={{width: side_bar_width, zIndex: 2}}
                 data-name="sidebar"
                 className={`sidebar bg-red ${overflow} border-r border-gray-200 p-4 transition-all duration-300 ${
                 collapsed ? "w-16" : "w-64"
