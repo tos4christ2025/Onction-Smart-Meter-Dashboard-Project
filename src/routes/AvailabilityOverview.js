@@ -33,6 +33,7 @@ class Availability_Overview extends Component {
       data: null,
       complete_data: null,
       isLoading: true,
+      isFirstLoading: true,
       error: null,
       sidebarCollapsed: window.innerWidth >= 768 ? false : true,
       viewMode: "daily", // hourly, daily, weekly
@@ -115,6 +116,7 @@ class Availability_Overview extends Component {
       })
       .finally(() => {
         this.setState({ isLoading: false });
+        this.setState({ isFirstLoading: false });
       });
     } catch (err) {
       this.setState({ error: err });
@@ -149,7 +151,7 @@ class Availability_Overview extends Component {
   };
 
   render() {
-    const { isLoading, error, showText, complete_data } = this.state;
+    const { isLoading, error, showText, complete_data, isFirstLoading } = this.state;
     const { selectedZone } = this.state;
     const uniqueZones = ["All", ...new Set(complete_data?.map((d) => d.zone))];
     // const { sidebarCollapsed, viewMode, sidebarVisible, } = this.state;
@@ -157,13 +159,15 @@ class Availability_Overview extends Component {
     uniqueZones.forEach(zone => {
       if(zone !== 'All') complete_chart_data[zone] = complete_data?.filter( data => data.zone == zone);
     });
-    // if (isLoading) {
-    //    (
-    //     <div style={{width: "50%", margin: "0 auto"}}  className="flex justify-center items-center h-screen" data-name="loading">
-    //       <i className="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
-    //     </div>
-    //   );
-    // }
+    if (isFirstLoading) {
+       return (
+        <div style={{width: "50%", margin: "0 auto"}}  className="flex flex-col justify-center items-center h-screen" data-name="loading">
+          <i className="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
+          <br />
+          <p className='text-blue-500 text-3xl mt-4'>Initializing Dashboard</p>
+        </div>
+      );
+    }
     // if (error) {
     //    (
     //     <div style={{width: "50%", margin: "0 auto"}} className="flex justify-center items-center h-screen text-red-500" data-name="error">
@@ -193,8 +197,9 @@ class Availability_Overview extends Component {
 
               {isLoading && 
                 (
-                  <div style={{width: "50%", margin: "0 auto"}}  className="flex justify-center items-center" data-name="loading">
+                  <div style={{width: "50%", margin: "0 auto"}}  className="flex flex-col justify-center items-center" data-name="loading">
                     <i className="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
+                    <p className='text-blue-500 text-lg mt-4' >Updating</p>
                   </div>
                 )
               }
