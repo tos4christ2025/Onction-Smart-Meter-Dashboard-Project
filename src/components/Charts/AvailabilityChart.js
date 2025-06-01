@@ -210,7 +210,7 @@ class AvailabilityChart extends Component {
         try {
             return (
                 <>
-                <div className="grid grid-col-2 card ml-3 w-full" data-name="zone-comparison-chart">
+                <div style={{ maxWidth: "100%", height: "auto" }} className="grid grid-col-1 card ml-3 overflow-x-auto w-full" data-name="zone-comparison-chart">
                     <canvas ref={this.chartRef} data-name="zone-comparison-canvas"></canvas>                    
                 </div>
                 <div className="flex justify-between items-center">

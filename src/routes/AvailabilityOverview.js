@@ -4,6 +4,7 @@ import { withRouter } from '../utils/withRouter';
 import AvailabilityChart from '../components/Charts/AvailabilityChart';
 import { ZoneSidebar } from '../components/Sidebar/ZoneSidebar';
 import { PowerDataTable } from '../components/Tables/PowerTable_Zones';
+import data from '../utils/data';
 
 let feeder_ids = [728, 807, 736, 751, 772, 765, 806, 813, 815, 733, 808, 727, 739, 773, 743, 826, 816, 774, 770, 752, 754, 747, 748, 794];
 let trading_point_to_feederId = {
@@ -190,7 +191,7 @@ class Availability_Overview extends Component {
                 onZoneChange={this.handleZoneChange}
               />
               <span>
-                <button onClick={this.showComponent} className=" text-sm bg-gray-300 mt-2 p-2 rounded">
+                <button onClick={this.showComponent} className=" text-sm bg-gray-300 mt-5 p-2 rounded">
                   <p style={{color: "purple"}} className="p-1 rounded">{showText}</p>
                 </button>
               </span>
@@ -221,7 +222,7 @@ class Availability_Overview extends Component {
                 <PowerDataTable data={complete_data} selectedZone={selectedZone} />
               </div>)}
             </div>
-            {this.state.showChart && (<div className="flex-1 w-full grid grid-cols-1  mt-10 mb-10 mr-2" data-name="charts-grid">
+            {this.state.showChart && (<div style={{width: "700px"}} className="grid grid-cols-1  mt-10 mb-10 mr-2 overflow-auto" data-name="charts-grid">
               <AvailabilityChart complete_chart_data={complete_chart_data} selectedZone={selectedZone} />
             </div>)}
       </div>

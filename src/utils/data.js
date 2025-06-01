@@ -1,4 +1,4 @@
-const current_zones = ["Bauchi", "Gombe", "Makari Jos", "Zaria Road Jos", " Yandev Gboko"];
+export const current_zones = ["Bauchi", "Gombe", "Makari Jos", "Zaria Road Jos", " Yandev Gboko"];
     const Zones = [
       {zone: "Bauchi", trading_point: "GRA/PALACE", name: "GRA/PALACE", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
       {zone: "Bauchi", trading_point: "GUBI", name: "GUBI DAM", date: "29-05-2025", time: "19:05", megawatts: 2.30, voltage: 11.2, amperes: 219, feederStatus: "ON", uptime: 12}, 
