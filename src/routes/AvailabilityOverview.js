@@ -191,7 +191,7 @@ class Availability_Overview extends Component {
                 onZoneChange={this.handleZoneChange}
               />
               <span>
-                <button onClick={this.showComponent} className=" text-sm bg-gray-300 mt-5 p-2 rounded">
+                <button onClick={this.showComponent} className=" text-sm bg-gray-300 mt-2 p-2 rounded">
                   <p style={{color: "purple"}} className="p-1 rounded">{showText}</p>
                 </button>
               </span>
