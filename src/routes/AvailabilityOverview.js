@@ -49,9 +49,12 @@ class Availability_Overview extends Component {
 
   componentDidMount() {
     this.fetchAvailability();
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.fetchAvailability();
     }, 300000);    
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
   }
   handleZoneChange = (zone) => {
     this.setState({ selectedZone: zone });
