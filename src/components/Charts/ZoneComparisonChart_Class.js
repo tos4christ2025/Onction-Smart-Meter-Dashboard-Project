@@ -101,7 +101,7 @@ class ZoneComparisonChart extends Component {
     render() {
         try {
             return (
-                <div className="card" data-name="zone-comparison-chart">
+                <div className="card h-80" data-name="zone-comparison-chart">
                     <canvas ref={this.chartRef} data-name="zone-comparison-canvas"></canvas>
                 </div>
             );

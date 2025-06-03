@@ -18,7 +18,7 @@ function DashboardHeader({ totalUsage, savings }) {
                         </button>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" data-name="summary-cards">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="summary-cards">
                     <div className="card" data-name="total-usage-card">
                         <div className="text-gray-600 mb-1" data-name="card-label">Total Usage</div>
                         <div className="text-2xl font-bold" data-name="card-value">{totalUsage.value} MWh</div>

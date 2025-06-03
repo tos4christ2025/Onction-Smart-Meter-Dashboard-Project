@@ -45,6 +45,7 @@ class Availability_Overview extends Component {
       showText: "Show Chart",
       showChart: false
     };
+    this.intervalId = null;
   }
 
   componentDidMount() {

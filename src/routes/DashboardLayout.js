@@ -132,7 +132,7 @@ class DashboardLayout extends Component {
             <div style={{marginLeft: side_bar_width, display: landing_page_view}} className="landingpage_container h-screen">
               <h1>Welcome to Onction Energy Dashboard</h1>
               <p>Take control of your energy data and insights. Navigate through the sidebar to access real-time analytics, reports, and management tools.</p>
-              <button className="cta">Go to Dashboard</button>
+              <button className="cta"><a href='/dashboard'>Go to Dashboard</a></button>
             </div>
             <Outlet />
         </main>

@@ -37,14 +37,14 @@ export const getMockData = () => {
                 status: 'normal',
                 currentUsage: '532.1',
                 dailyAverage: '30.8',
-                peakDemand: '4.1'
+                peakDemand: '7.1'
             },
             {
                 name: 'Yandev Gboko',
                 status: 'normal',
                 currentUsage: '362.1',
                 dailyAverage: '30.8',
-                peakDemand: '4.1'
+                peakDemand: '4.8'
             }
         ],
         alerts: [

@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// 
+
 function ZoneOverview({ zones }) {
     try {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="zone-overview">
                 {zones.map((zone, index) => (
-                    <div key={index} className="card" data-name="zone-card">
-                        <div className="flex justify-between items-center mb-4" data-name="zone-header">
+                    <div key={index} className="card m-0 p-1 flex flex-col justify-between relative w-full max-w-sm" data-name="zone-card">
+                        <div className="flex justify-between items-center mb-2 flex-wrap" data-name="zone-header">
                             <h3 className="text-lg font-semibold" data-name="zone-title">{zone.name}</h3>
                             <span className={`px-2 py-1 rounded-full text-sm ${
                                 zone.status === 'normal' ? 'bg-green-100 text-green-800' : 
@@ -17,7 +19,7 @@ function ZoneOverview({ zones }) {
                                 {zone.status}
                             </span>
                         </div>
-                        <div className="space-y-2" data-name="zone-metrics">
+                        <div className="space-y-1" data-name="zone-metrics">
                             <div className="flex justify-between" data-name="current-usage">
                                 <span className="text-gray-600">Current Usage:</span>
                                 <span className="font-medium">{zone.currentUsage} MWh</span>
@@ -31,8 +33,16 @@ function ZoneOverview({ zones }) {
                                 <span className="font-medium">{zone.peakDemand} MW</span>
                             </div>
                         </div>
+                        {/* View More Button */}
+                        <div className="flex justify-end mt-3">
+                            <a href={`/`} className="px-2 py-1 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 transition flex items-center">
+                            View More
+                            {/* <span className="ml-1 px-2 py-0.5 text-xs bg-blue-200 text-blue-800 rounded-full">🔍</span> */}
+                            </a>
+                        </div>
                     </div>
                 ))}
+                
             </div>
         );
     } catch (error) {
