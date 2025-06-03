@@ -59,34 +59,34 @@ export class PowerDataTable extends Component {
         return (
         <>
             <div className="overflow-x-auto w-full">
-                <table className="min-w-full table-auto border border-gray-200 rounded-xl shadow-sm">
-                <thead className="bg-gray-100 text-gray-700 uppercase text-sm">
+                <table className="min-w-full table-auto border-0 border-gray-200 rounded-xl shadow-sm">
+                <thead className="bg-white text-gray-700 uppercase text-sm border-b-2 border-gray-200">
                     <tr>
-                    <th className="px-4 py-3 text-center">Date</th>
-                    <th className="px-4 py-3 text-center">Time</th>
-                    <th className="px-4 py-3 text-center">Zone</th>
-                    <th className="px-4 py-3 text-center">Trading Point</th>
-                    <th className="px-4 py-3 text-center">Name</th>
-                    <th className="px-4 py-3 text-center">MW</th>
-                    <th className="px-4 py-3 text-center">KV</th>
-                    <th className="px-4 py-3 text-center">AMP</th>
-                    <th className="px-4 py-3 text-center">Status</th>
-                    <th className="px-4 py-3 text-center">Uptime</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Date</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Time</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Zone</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Trading Point</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Name</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">MW</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">KV</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">AMP</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Status</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Uptime</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 text-gray-800 text-sm">
                     {visibleData.map((r, i) => (
                     <tr key={i} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-4 py-2 text-center">{r.date}</td>
-                        <td className="px-1 py-2 text-center">{r.time}</td>
-                        <td className="px-1 py-2 text-center">{r.zone}</td>
-                        <td className="px-1 py-2 text-center">{r.trading_point}</td>
-                        <td className="px-1 py-2 text-center">{r.name}</td>
-                        <td className="px-1 py-2 text-center">{r.megawatts}</td>
-                        <td className="px-1 py-2 text-center">{r.voltage}</td>
-                        <td className="px-1 py-2 text-center">{r.amperes}</td>
-                        <td className="px-1 py-2 text-center">{this.renderStatusBadge(r.feederStatus)}</td>
-                        <td className="px-1 py-2 text-center">{r.uptime}</td>
+                        <td className="px-4 py-2 text-center border-2 rounded">{r.date}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.time}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.zone}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.trading_point}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.name}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.megawatts}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.voltage}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.amperes}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{this.renderStatusBadge(r.feederStatus)}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.uptime}</td>
                     </tr>
                     ))}
                 </tbody>

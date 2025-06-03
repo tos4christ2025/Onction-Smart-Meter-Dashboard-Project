@@ -187,15 +187,15 @@ class Availability_Overview extends Component {
     return (
       <div  className="dashboard-container" data-name="dashboard">
           <div style={{marginLeft: this.props.side_bar_width}} className="flex h-screen">
-            <div style={{zIndex: 1}} className="flex-2 p-5 bg-white-50 overflow-auto">
+            <div style={{zIndex: 1}} className="flex-2 p-5 bg-white overflow-auto">
               <ZoneSidebar
                 zones={uniqueZones}
                 selectedZone={selectedZone}
                 onZoneChange={this.handleZoneChange}
               />
               <span>
-                <button onClick={this.showComponent} className=" text-sm bg-gray-300 mt-2 p-2 rounded">
-                  <p style={{color: "purple"}} className="p-1 rounded">{showText}</p>
+                <button onClick={this.showComponent} className=" text-sm bg-gray-500 mt-2 p-2 border-4 rounded-md font-medium ">
+                  <p style={{color: "white"}} className="p-1 rounded">{showText}</p>
                 </button>
               </span>
 
@@ -218,7 +218,7 @@ class Availability_Overview extends Component {
                 )                    
               }
             </div>          
-            {this.state.showTable && (<div className="flex-1 p-5 bg-white-50 overflow-auto">
+            {this.state.showTable && (<div className="flex-1 p-5 bg-white overflow-auto">
                 <h1 className="text-2xl font-bold mb-4">
                   Power Monitoring Dashboard {selectedZone ? `- ${selectedZone}` : ""}
                 </h1>
