@@ -63,7 +63,6 @@ class Availability_Overview extends Component {
   async fetchAvailability() {
     try {
       this.setState({ isLoading: true });
-      console.log(" I am activated again")
       const complete_data = [];
       const url = `https://feedercomplianceprodapi.azurewebsites.net/api/v1/Energy/feeder-online-data?apiKey=${process.env.REACT_APP_POWERTECH_API_KEY}`;
       fetch(url, {

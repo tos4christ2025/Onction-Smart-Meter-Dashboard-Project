@@ -290,13 +290,6 @@ class DashboardOverview extends Component {
           {/* <ZoneOverview zones={data.zones} /> */}
             <ZoneOverview zones={zones_data} />
 
-          { (isLoading) & (
-              <div style={{width: "50%", margin: "0 auto", display: 'relative'}} className="flex justify-center items-center h-screen" data-name="loading">
-                <i className="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
-              </div>
-            )
-          }
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" data-name="charts-grid">
             <EnergyUsageChart data={data.energyUsage} />
             <ZoneComparisonChart data={data.zoneComparison} />
