@@ -20,15 +20,15 @@ function ZoneOverview({ zones }) {
                         <div className="space-y-2" data-name="zone-metrics">
                             <div className="flex justify-between" data-name="current-usage">
                                 <span className="text-gray-600">Current Usage:</span>
-                                <span className="font-medium">{zone.currentUsage} kWh</span>
+                                <span className="font-medium">{zone.currentUsage} MWh</span>
                             </div>
                             <div className="flex justify-between" data-name="daily-average">
                                 <span className="text-gray-600">Daily Average:</span>
-                                <span className="font-medium">{zone.dailyAverage} kWh</span>
+                                <span className="font-medium">{zone.dailyAverage} MWh</span>
                             </div>
                             <div className="flex justify-between" data-name="peak-demand">
                                 <span className="text-gray-600">Peak Demand:</span>
-                                <span className="font-medium">{zone.peakDemand} kW</span>
+                                <span className="font-medium">{zone.peakDemand} MW</span>
                             </div>
                         </div>
                     </div>

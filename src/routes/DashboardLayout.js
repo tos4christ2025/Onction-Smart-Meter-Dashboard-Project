@@ -9,10 +9,12 @@ import EnergyFlowDiagram from '../components/Charts/EnergyFlowDiagram';
 import ZoneOverview from '../components/Dashboard/ZoneOverview';
 import DashboardHeader from '../components/Dashboard/DashboardHeader';
 import { getMockData } from '../utils/dataUtils';
+import '../styles/landing_page.css'
 
 class DashboardLayout extends Component {
   constructor(props) {
     super(props);
+    this.hideLandingPage = this.hideLandingPage.bind(this);
     this.state = {
       data: null,
       isLoading: true,
@@ -25,11 +27,14 @@ class DashboardLayout extends Component {
       viewMode: "daily", // hourly, daily, weekly
       side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
       overflow: "overflow-scroll",
+      landing_page_view: ''
     };
   }
 
   componentDidMount() {
     this.fetchData();
+    const { pathname } = this.props.location;
+    if(pathname !== '/') this.setState({landing_page_view: 'none'});
   }
 
   async fetchData() {
@@ -68,13 +73,14 @@ class DashboardLayout extends Component {
   reportError(err) {
     console.error('Dashboard error:', err);
   }
-  setSideBarWidth() {
-      
+  hideLandingPage() {
+      this.setState({landing_page_view: 'none'});
   }
 
   render() {
     const { data, isLoading, error } = this.state;
     const {
+      landing_page_view,
       selectedZone,
       sidebarCollapsed,
       showUsageChart,
@@ -107,7 +113,7 @@ class DashboardLayout extends Component {
 
     return (
       <div className="dashboard-container" data-name="dashboard">
-        {/* <div className="sidebar" data-name="sidebar"> */}
+        <div onClick={this.hideLandingPage} data-name="sidebar">
           <Sidebar 
             collapsed={sidebarCollapsed}
             onToggleCollapse={this.toggleSidebar}
@@ -121,8 +127,13 @@ class DashboardLayout extends Component {
             }}
             onSelectZone={(zone) => this.setState({ selectedZone: zone })}
           />
-        {/* </div> */}
+        </div>
         <main  className='dashboard-main w-full' data-name="dashboard">
+            <div style={{marginLeft: side_bar_width, display: landing_page_view}} className="landingpage_container h-screen">
+              <h1>Welcome to Onction Energy Dashboard</h1>
+              <p>Take control of your energy data and insights. Navigate through the sidebar to access real-time analytics, reports, and management tools.</p>
+              <button className="cta">Go to Dashboard</button>
+            </div>
             <Outlet />
         </main>
       </div>
@@ -131,4 +142,4 @@ class DashboardLayout extends Component {
 }
 
 // export default withRouter(DashboardLayout);
-export default DashboardLayout;
+export default withRouter(DashboardLayout);

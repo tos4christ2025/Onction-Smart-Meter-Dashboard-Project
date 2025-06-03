@@ -21,7 +21,7 @@ function DashboardHeader({ totalUsage, savings }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" data-name="summary-cards">
                     <div className="card" data-name="total-usage-card">
                         <div className="text-gray-600 mb-1" data-name="card-label">Total Usage</div>
-                        <div className="text-2xl font-bold" data-name="card-value">{totalUsage.value} kWh</div>
+                        <div className="text-2xl font-bold" data-name="card-value">{totalUsage.value} MWh</div>
                         <div className={`text-sm ${totalUsage.change >= 0 ? 'text-red-600' : 'text-green-600'}`} data-name="card-change">
                             <i className={`fas ${totalUsage.change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i>
                             {Math.abs(totalUsage.change)}% vs last week
