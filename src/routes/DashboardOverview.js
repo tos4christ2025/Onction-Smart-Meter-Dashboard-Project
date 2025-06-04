@@ -150,7 +150,7 @@ class DashboardOverview extends Component {
       ASHAKA, BCC1, BCC2, BUKURU, COCACOLA, FMC, GRA_GOMBE, GRA_PALACE,
        GUBI_DAM, IBRAHIM_TAIWO, INDUSTRIAL_JOS, LIBERTY_DAM, MAKERI, NASCO, SECRETARIAT, TEACHING_HOSPITAL,
        TUNFURE, UNIJOS, WEST_OF_MINES, WUNTI_ROAD, 
-      isLoading: false
+      isLoading: false, error: null
       });
     } catch (err) {
       this.setState({ error: err });
