@@ -2,16 +2,10 @@ import React, { Component } from 'react';
 import { Outlet } from 'react-router-dom';
 import { withRouter } from '../utils/withRouter';
 import Sidebar from '../components/Sidebar/Sidebar';
-import EnergyUsageChart from '../components/Charts/EnergyUsageChart';
-import ZoneComparisonChart from '../components/Charts/ZoneComparisonChart_Class';
-import EnergyFlowDiagram from '../components/Charts/EnergyFlowDiagram';
-// import AlertPanel from '../components/Dashboard/AlertPanel';
-import ZoneOverview from '../components/Dashboard/ZoneOverview';
-import DashboardHeader from '../components/Dashboard/DashboardHeader';
 import { getMockData } from '../utils/dataUtils';
 import '../styles/landing_page.css'
 
-class DashboardLayout extends Component {
+class AppLayout extends Component {
   constructor(props) {
     super(props);
     this.hideLandingPage = this.hideLandingPage.bind(this);
@@ -113,7 +107,28 @@ class DashboardLayout extends Component {
 
     return (
       <div className="dashboard-container" data-name="dashboard">
+        <div onClick={this.hideLandingPage} data-name="sidebar">
+          <Sidebar 
+            collapsed={sidebarCollapsed}
+            onToggleCollapse={this.toggleSidebar}
+            onToggleSection={this.toggleSection}
+            side_bar_width={side_bar_width}
+            overflow={this.state.overflow}
+            sections={{
+              showUsageChart,
+              showAlerts,
+              showEnergyFlow,
+            }}
+            onSelectZone={(zone) => this.setState({ selectedZone: zone })}
+          />
+        </div>
         <main  className='dashboard-main w-full' data-name="dashboard">
+            <div style={{marginLeft: side_bar_width, display: landing_page_view}} className="landingpage_container h-screen">
+              <h1>Welcome to Onction Energy</h1>
+                <p>Take control of your energy data and insights. Navigate through the sidebar to access real-time analytics, reports, and management tools.</p>
+                <p>Click the button below to go to your dashboard and start exploring.</p>
+              <button className="cta"><a href='/dashboard'>Go to Dashboard</a></button>
+            </div>
             <Outlet />
         </main>
       </div>
@@ -122,4 +137,4 @@ class DashboardLayout extends Component {
 }
 
 // export default withRouter(DashboardLayout);
-export default withRouter(DashboardLayout);
+export default withRouter(AppLayout);

@@ -46,7 +46,7 @@ class Sidebar extends React.Component {
                 {!collapsed && (<div className="" data-name="sidebar">
                     <div className="sidebar-header mt-4" data-name="sidebar-header">
                         <h1 className="text-xl font-bold" data-name="sidebar-title">
-                            Onction Energy Performance Dashboard
+                            <a href='/'>Onction Energy Performance Dashboard</a>
                         </h1>
                     </div>
                     

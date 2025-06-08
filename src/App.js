@@ -15,6 +15,7 @@ import '../src/styles/index.css';
 import '../src/styles/main.css';
 import AlertPanelLayout from './routes/AlertsPanelLayout';
 import AlertPanelDetails from './routes/AlertsPanelDetails'
+import AppLayout from './routes/AppLayout';
 import DashboardLayout from './routes/DashboardLayout';
 import DashboardOverview from './routes/DashboardOverview'; 
 import AvailabilityLayout from './routes/AvailabilityLayout';
@@ -53,12 +54,18 @@ class App extends React.Component {
       <Router>
         <div className="app" data-name="app">  
           <Routes>
-              <Route exact path="/" element={<DashboardLayout setSideBarWidth={this.setSideBarWidth} />} >
-                <Route path="dashboard" element={<DashboardOverview side_bar_width={this.state.side_bar_width} />} />                
+              <Route exact path="/" element={<AppLayout setSideBarWidth={this.setSideBarWidth} />} >
+                {/* Dashboard Route */}
+                <Route path="dashboard" element={<DashboardLayout side_bar_width={this.state.side_bar_width} />} >
+                  <Route index element={<DashboardOverview side_bar_width={this.state.side_bar_width} />} />
+                  {/* <Route path=":zoneId" element={<DashboardOverview side_bar_width={this.state.side_bar_width} />} /> */}
+                </Route>
+                {/* Availability Route */}
                 <Route path="availability" element={<AvailabilityLayout />} >
                   <Route index element={<AvailabilityOverview side_bar_width={this.state.side_bar_width} />} />
                   <Route path=":zoneId" element={<AvailabilityDetail />} />
                 </Route>
+                {/* Alerts Route */}
                 <Route path="alerts" element={<AlertPanelLayout />} >
                   <Route index element={<AlertPanelDetails />} />
                 </Route>
