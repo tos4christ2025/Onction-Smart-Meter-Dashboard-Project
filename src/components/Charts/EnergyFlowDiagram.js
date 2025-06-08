@@ -93,7 +93,7 @@ function EnergyFlowDiagram({ data }) {
     }, [data, dimensions]);
 
     return (
-        <div className="card" data-name="energy-flow-diagram">
+        <div className="card w-full h-128" data-name="energy-flow-diagram">
             <h3 className="text-lg font-semibold mb-4" data-name="diagram-title">Energy Flow Diagram</h3>
             <div className="energy-flow-diagram" data-name="diagram-container">
                 <svg ref={svgRef} data-name="diagram-svg"></svg>
