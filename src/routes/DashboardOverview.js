@@ -145,13 +145,22 @@ class DashboardOverview extends Component {
         this.fetchWithRetry(pageNumber, urls.url_westOfMines),
         this.fetchWithRetry(pageNumber, urls.url_wuntiRoad),
       ]);
-      this.setState({
+      const stateObject = {
        GOVT_HOUSE_GOMBE, NEW_GOVT_HOUSE_JOS, 
       ASHAKA, BCC1, BCC2, BUKURU, COCACOLA, FMC, GRA_GOMBE, GRA_PALACE,
        GUBI_DAM, IBRAHIM_TAIWO, INDUSTRIAL_JOS, LIBERTY_DAM, MAKERI, NASCO, SECRETARIAT, TEACHING_HOSPITAL,
        TUNFURE, UNIJOS, WEST_OF_MINES, WUNTI_ROAD, 
       isLoading: false, error: null
-      });
+      };
+      const stateArray = [
+        {name: 'bauchi', data: [{GRA_PALACE}, {WUNTI_ROAD}, {GUBI_DAM}, {TEACHING_HOSPITAL}]},
+        {name: 'gombe', data: [{FMC}, {GRA_GOMBE}, {TUNFURE}, {ASHAKA}, {GOVT_HOUSE_GOMBE}]},
+        {name: 'makari_jos', data: [{NASCO}, {MAKERI}, {COCACOLA}, {SECRETARIAT}, {BUKURU}, {LIBERTY_DAM}, {IBRAHIM_TAIWO}, {INDUSTRIAL_JOS}, {NEW_GOVT_HOUSE_JOS}]},
+        {name: 'zaria_jos', data: [{UNIJOS}, {WEST_OF_MINES}]},
+        {name: 'yandev_gboko', data: [{BCC1}, {BCC2}]}
+      ];
+      this.setState(stateObject);
+      this.props.setZoneData(stateArray)
     } catch (err) {
       this.setState({ error: err });
       this.reportError(err);
@@ -253,11 +262,11 @@ class DashboardOverview extends Component {
     const Zaria_Jos_Energy = (isNaN(UNIJOS?.activeEnergyTotal) ? 0 : UNIJOS?.activeEnergyTotal) + (isNaN(WEST_OF_MINES?.activeEnergyTotal) ? 0 : WEST_OF_MINES?.activeEnergyTotal);
 
     const zones_data = [
-      {name: "Bauchi", status: 'normal', currentUsage: (Bauchi_Energy/1000).toFixed(2), dailyAverage: ((Bauchi_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Bauchi_Energy/1000).toFixed(2)},
-      {name: "Gombe", status: 'normal', currentUsage: (Gombe_Energy/1000).toFixed(2), dailyAverage: ((Gombe_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Gombe_Energy/1000).toFixed(2)},
-      {name: "Makari_Jos", status: 'normal', currentUsage: (Makari_Jos_Energy/1000).toFixed(2), dailyAverage: ((Makari_Jos_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Makari_Jos_Energy/1000).toFixed(2)},
-      {name: "Zaria_Jos", status: 'normal', currentUsage: (Zaria_Jos_Energy/1000).toFixed(2), dailyAverage: ((Zaria_Jos_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Zaria_Jos_Energy/1000).toFixed(2)},
-      {name: "Yandev_Gboko", status: 'normal', currentUsage: (Yandev_Gboko_Energy/1000).toFixed(2), dailyAverage: ((Yandev_Gboko_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Yandev_Gboko_Energy/1000).toFixed(2)},
+      {name: "Bauchi", feeders: [GRA_PALACE, WUNTI_ROAD, GUBI_DAM, TEACHING_HOSPITAL], status: 'normal', currentUsage: (Bauchi_Energy/1000).toFixed(2), dailyAverage: ((Bauchi_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Bauchi_Energy/1000).toFixed(2)},
+      {name: "Gombe", feeders: [FMC, GRA_GOMBE, TUNFURE, ASHAKA, GOVT_HOUSE_GOMBE], status: 'normal', currentUsage: (Gombe_Energy/1000).toFixed(2), dailyAverage: ((Gombe_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Gombe_Energy/1000).toFixed(2)},
+      {name: "Makari_Jos", feeders: [NASCO, MAKERI, COCACOLA, SECRETARIAT, BUKURU, LIBERTY_DAM, IBRAHIM_TAIWO, INDUSTRIAL_JOS, NEW_GOVT_HOUSE_JOS], status: 'normal', currentUsage: (Makari_Jos_Energy/1000).toFixed(2), dailyAverage: ((Makari_Jos_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Makari_Jos_Energy/1000).toFixed(2)},
+      {name: "Zaria_Jos", feeders: [UNIJOS, WEST_OF_MINES], status: 'normal', currentUsage: (Zaria_Jos_Energy/1000).toFixed(2), dailyAverage: ((Zaria_Jos_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Zaria_Jos_Energy/1000).toFixed(2)},
+      {name: "Yandev_Gboko", feeders: [BCC1, BCC2], status: 'normal', currentUsage: (Yandev_Gboko_Energy/1000).toFixed(2), dailyAverage: ((Yandev_Gboko_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Yandev_Gboko_Energy/1000).toFixed(2)},
     ]
     // if (isLoading) {
     //   return (

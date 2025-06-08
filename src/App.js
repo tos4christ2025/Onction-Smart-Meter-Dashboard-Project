@@ -21,6 +21,7 @@ import DashboardOverview from './routes/DashboardOverview';
 import AvailabilityLayout from './routes/AvailabilityLayout';
 import AvailabilityOverview from './routes/AvailabilityOverview';
 import AvailabilityDetail from './routes/AvailabilityDetail';
+import DashboardZoneDetails from './routes/DashboardZoneDetails';
 
 library.add(faCoffee, faUser);
 
@@ -28,8 +29,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.setSideBarWidth = this.setSideBarWidth.bind(this);
+    this.setZonesData = this.setZonesData.bind(this);
     this.state = {
       error: null,
+      zones_data: [],
       side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
     };
   }
@@ -49,6 +52,10 @@ class App extends React.Component {
   setSideBarWidth(width) {
       this.setState({side_bar_width: width});
   }
+  setZonesData = (data) => {
+    localStorage.setItem('app_zone_data', JSON.stringify(data || []));
+    this.setState({ zones_data: data });
+  }
   render() {
     return (
       <Router>
@@ -57,8 +64,8 @@ class App extends React.Component {
               <Route exact path="/" element={<AppLayout setSideBarWidth={this.setSideBarWidth} />} >
                 {/* Dashboard Route */}
                 <Route path="dashboard" element={<DashboardLayout side_bar_width={this.state.side_bar_width} />} >
-                  <Route index element={<DashboardOverview side_bar_width={this.state.side_bar_width} />} />
-                  {/* <Route path=":zoneId" element={<DashboardOverview side_bar_width={this.state.side_bar_width} />} /> */}
+                  <Route index element={<DashboardOverview setZoneData={this.setZonesData} side_bar_width={this.state.side_bar_width} />} />
+                  <Route path=":zoneId" element={<DashboardZoneDetails zones_data={this.state.zones_data} side_bar_width={this.state.side_bar_width} />} />
                 </Route>
                 {/* Availability Route */}
                 <Route path="availability" element={<AvailabilityLayout />} >

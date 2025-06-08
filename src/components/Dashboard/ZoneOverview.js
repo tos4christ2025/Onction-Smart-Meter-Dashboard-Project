@@ -1,10 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {withRouter} from '../../utils/withRouter';
 
 // 
 
-function ZoneOverview({ zones }) {
-    try {
+class ZoneOverview extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+   
+    componentDidCatch(error, info) {
+        console.error('Error caught in ZoneOverview:', error, info);
+        reportError(error);
+    }
+
+    render() {
+        const { zones } = this.props;
+        if (!zones || zones.length === 0) {
+            return <div className="text-center text-gray-500">No zones available</div>;
+        }
+        try {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="zone-overview">
                 {zones.map((zone, index) => (
@@ -35,7 +50,11 @@ function ZoneOverview({ zones }) {
                         </div>
                         {/* View More Button */}
                         <div className="flex justify-end mt-3">
-                            <a href={`/`} className="px-2 py-1 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 transition flex items-center">
+                            <a 
+                                onClick={(e) => {
+                                    this.props.navigate(`/dashboard/${zone.name.toLowerCase()}`);
+                                }} 
+                                className="px-2 py-1 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 transition flex items-center">
                             View More
                             {/* <span className="ml-1 px-2 py-0.5 text-xs bg-blue-200 text-blue-800 rounded-full">🔍</span> */}
                             </a>
@@ -45,11 +64,13 @@ function ZoneOverview({ zones }) {
                 
             </div>
         );
-    } catch (error) {
-        console.error('ZoneOverview component error:', error);
-        reportError(error);
-        return null;
+        } catch (error) {
+            console.error('ZoneOverview component error:', error);
+            reportError(error);
+            return null;
+        }
     }
+   
 }
 
 ZoneOverview.propTypes = {
@@ -64,4 +85,4 @@ ZoneOverview.propTypes = {
     ).isRequired
 };
 
-export default ZoneOverview;
+export default withRouter(ZoneOverview);
