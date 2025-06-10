@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from '../../utils/withRouter';
+import chartUtils from '../../utils/chartUtils';
 
-// 
 
 class ZoneOverview extends React.Component {
     constructor(props) {
@@ -37,15 +37,15 @@ class ZoneOverview extends React.Component {
                         <div className="space-y-1" data-name="zone-metrics">
                             <div className="flex justify-between" data-name="current-usage">
                                 <span className="text-gray-600">Current Usage:</span>
-                                <span className="font-medium">{zone.currentUsage} MWh</span>
+                                <span className="font-medium">{chartUtils.formatNumber(zone.currentUsage)} MWh</span>
                             </div>
                             <div className="flex justify-between" data-name="daily-average">
                                 <span className="text-gray-600">Daily Average:</span>
-                                <span className="font-medium">{zone.dailyAverage} MWh</span>
+                                <span className="font-medium">{chartUtils.formatNumber(zone.dailyAverage)} MWh</span>
                             </div>
                             <div className="flex justify-between" data-name="peak-demand">
                                 <span className="text-gray-600">Peak Demand:</span>
-                                <span className="font-medium">{zone.peakDemand} MW</span>
+                                <span className="font-medium">{chartUtils.formatNumber(zone.peakDemand)} MW</span>
                             </div>
                         </div>
                         {/* View More Button */}

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import chartUtils from '../../utils/chartUtils';
 
 function DashboardHeader({ totalUsage, savings, totalMW, totalEnergy, averageAvailable }) {
     try {
@@ -29,7 +30,7 @@ function DashboardHeader({ totalUsage, savings, totalMW, totalEnergy, averageAva
                     </div>
                     <div className="card" data-name="savings-card">
                         <div className="text-gray-600 mb-1" data-name="card-label">Total Energy</div>
-                        <div className="text-2xl font-bold" data-name="card-value">{totalEnergy} MWh</div>
+                        <div className="text-2xl font-bold" data-name="card-value">{chartUtils.formatNumber(totalEnergy)} MWh</div>
                         <div className="text-sm text-green-600" data-name="card-change">
                             <i className="fas fa-arrow-up mr-1"></i>
                             {savings.percentage}% this month
