@@ -22,6 +22,7 @@ import AvailabilityLayout from './routes/AvailabilityLayout';
 import AvailabilityOverview from './routes/AvailabilityOverview';
 import AvailabilityDetail from './routes/AvailabilityDetail';
 import DashboardZoneDetails from './routes/DashboardZoneDetails';
+import IndexPage from './routes/IndexPage';
 
 library.add(faCoffee, faUser);
 
@@ -37,12 +38,16 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
+    console.log("app mounted");
     // Global error handler
     window.onerror = (message, source, lineno, colno, error) => {
       console.error('Global error:', error);
       this.setState({ error });
       reportError(error);
     };
+  }
+  componentWillUnmount() {
+    console.log("app unmounted");
   }
   componentDidCatch(error, info) {
     this.setState({ error });
@@ -55,6 +60,8 @@ class App extends React.Component {
   setZonesData = (data) => {
     localStorage.setItem('app_zone_data', JSON.stringify(data || []));
     this.setState({ zones_data: data });
+    window.dispatchEvent(new Event("storage")); // Notify child component
+
   }
   render() {
     return (
@@ -62,13 +69,16 @@ class App extends React.Component {
         <div className="app" data-name="app">  
           <Routes>
               <Route exact path="/" element={<AppLayout setSideBarWidth={this.setSideBarWidth} />} >
+                {/* Home Route */}
+                <Route index element={<IndexPage />} />
+                {/* Alert Panel Route */}
                 {/* Dashboard Route */}
                 <Route path="dashboard" element={<DashboardLayout side_bar_width={this.state.side_bar_width} />} >
                   <Route index element={<DashboardOverview setZoneData={this.setZonesData} side_bar_width={this.state.side_bar_width} />} />
                   <Route path=":zoneId" element={<DashboardZoneDetails zones_data={this.state.zones_data} side_bar_width={this.state.side_bar_width} />} />
                 </Route>
                 {/* Availability Route */}
-                <Route path="availability" element={<AvailabilityLayout />} >
+                <Route path="availability" element={<AvailabilityLayout side_bar_width={this.state.side_bar_width} />} >
                   <Route index element={<AvailabilityOverview side_bar_width={this.state.side_bar_width} />} />
                   <Route path=":zoneId" element={<AvailabilityDetail />} />
                 </Route>
@@ -76,6 +86,9 @@ class App extends React.Component {
                 <Route path="alerts" element={<AlertPanelLayout />} >
                   <Route index element={<AlertPanelDetails />} />
                 </Route>
+                {/* Payments Route */}
+                {/* Analytics */}
+                {/* Settinngs */}
               </Route>              
           </Routes>
          </div>

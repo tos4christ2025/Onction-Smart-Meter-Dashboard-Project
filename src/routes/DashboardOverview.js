@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from '../utils/withRouter';
-import Sidebar from '../components/Sidebar/Sidebar';
 import EnergyUsageChart from '../components/Charts/EnergyUsageChart';
 import ZoneComparisonChart from '../components/Charts/ZoneComparisonChart_Class';
 import EnergyFlowDiagram from '../components/Charts/EnergyFlowDiagram';
@@ -95,6 +94,7 @@ class DashboardOverview extends Component {
   }
 
   componentDidMount() {
+    console.log("mounted");
     this.fetchData();
     this.fetchEnergyData();
     this.pollingInterval = setInterval(() => {
@@ -103,11 +103,41 @@ class DashboardOverview extends Component {
     // fetch energy data for all the stations at the current moment using the algorithm and update their state
   }
   componentDidUpdate(prevProps, prevState) {
-    if(prevState !== this.state) {
-
+    if(prevState.BUKURU !== this.state.BUKURU || 
+      prevState.GRA_PALACE !== this.state.GRA_PALACE || 
+      prevState.GUBI_DAM !== this.state.GUBI_DAM || 
+      prevState.TEACHING_HOSPITAL !== this.state.TEACHING_HOSPITAL ||
+      prevState.WUNTI_ROAD !== this.state.WUNTI_ROAD ||
+      prevState.ASHAKA !== this.state.ASHAKA ||
+      prevState.GOVT_HOUSE_GOMBE !== this.state.GOVT_HOUSE_GOMBE ||
+      prevState.TUNFURE !== this.state.TUNFURE ||
+      prevState.FMC !== this.state.FMC ||
+      prevState.GRA_GOMBE !== this.state.GRA_GOMBE ||
+      prevState.COCACOLA !== this.state.COCACOLA ||
+      prevState.NASCO !== this.state.NASCO ||
+      prevState.INDUSTRIAL_JOS !== this.state.INDUSTRIAL_JOS ||
+      prevState.MAKERI !== this.state.MAKERI ||
+      prevState.NEW_GOVT_HOUSE_JOS !== this.state.NEW_GOVT_HOUSE_JOS ||
+      prevState.IBRAHIM_TAIWO !== this.state.IBRAHIM_TAIWO ||
+      prevState.LIBERTY_DAM !== this.state.LIBERTY_DAM ||
+      prevState.SECRETARIAT !== this.state.SECRETARIAT ||
+      prevState.WEST_OF_MINES !== this.state.WEST_OF_MINES ||
+      prevState.UNIJOS !== this.state.UNIJOS ||
+      prevState.BCC1 !== this.state.BCC1 ||
+      prevState.BCC2 !== this.state.BCC2) {
+        // Update the zone data in the parent component
+        const stateArray = [
+          {name: 'bauchi', data: [{GRA_PALACE: this.state.GRA_PALACE}, {WUNTI_ROAD: this.state.WUNTI_ROAD}, {GUBI_DAM: this.state.GUBI_DAM}, {TEACHING_HOSPITAL: this.state.TEACHING_HOSPITAL}]},
+          {name: 'gombe', data: [{FMC: this.state.FMC}, {GRA_GOMBE: this.state.GRA_GOMBE}, {TUNFURE: this.state.TUNFURE}, {ASHAKA: this.state.ASHAKA}, {GOVT_HOUSE_GOMBE: this.state.GOVT_HOUSE_GOMBE}]},
+          {name: 'makari_jos', data: [{NASCO: this.state.NASCO}, {MAKERI: this.state.MAKERI}, {COCACOLA: this.state.COCACOLA}, {SECRETARIAT: this.state.SECRETARIAT}, {BUKURU: this.state.BUKURU}, {LIBERTY_DAM: this.state.LIBERTY_DAM}, {IBRAHIM_TAIWO: this.state.IBRAHIM_TAIWO}, {INDUSTRIAL_JOS: this.state.INDUSTRIAL_JOS}, {NEW_GOVT_HOUSE_JOS: this.state.NEW_GOVT_HOUSE_JOS}]},
+          {name: 'zaria_jos', data: [{UNIJOS: this.state.UNIJOS}, {WEST_OF_MINES: this.state.WEST_OF_MINES}]},
+          {name: 'yandev_gboko', data: [{BCC1: this.state.BCC1}, {BCC2: this.state.BCC2}]}
+        ];
+        this.props.setZoneData(stateArray);
     }
   }
   componentWillUnmount() {
+    console.log("unmounted");
     clearInterval(this.pollingInterval);
   }
 
@@ -244,6 +274,39 @@ class DashboardOverview extends Component {
             INDUSTRIAL_JOS, MAKERI, IBRAHIM_TAIWO
           } = this.state;
 
+    // calculate energy usage for all feeders
+
+    // calculate totalMW from actualPowerInst
+    const GRA_PALACE_MW = (isNaN(GRA_PALACE?.actualPowerInst) ? 0 : GRA_PALACE?.actualPowerInst) / 1000;
+    const WUNTI_ROAD_MW = (isNaN(WUNTI_ROAD?.actualPowerInst) ? 0 : WUNTI_ROAD?.actualPowerInst) / 1000; 
+    const GUBI_DAM_MW = (isNaN(GUBI_DAM?.actualPowerInst) ? 0 : GUBI_DAM?.actualPowerInst) / 1000;
+    const TEACHING_HOSPITAL_MW = (isNaN(TEACHING_HOSPITAL?.actualPowerInst) ? 0 : TEACHING_HOSPITAL?.actualPowerInst) / 1000;
+    const ASHAKA_MW = (isNaN(ASHAKA?.actualPowerInst) ? 0 : ASHAKA?.actualPowerInst) / 1000;
+    const GOVT_HOUSE_GOMBE_MW = (isNaN(GOVT_HOUSE_GOMBE?.actualPowerInst) ? 0 : GOVT_HOUSE_GOMBE?.actualPowerInst) / 1000;
+    const TUNFURE_MW = (isNaN(TUNFURE?.actualPowerInst) ? 0 : TUNFURE?.actualPowerInst) / 1000;
+    const FMC_MW = (isNaN(FMC?.actualPowerInst) ? 0 : FMC?.actualPowerInst) / 1000;
+    const GRA_GOMBE_MW = (isNaN(GRA_GOMBE?.actualPowerInst) ? 0 : GRA_GOMBE?.actualPowerInst) / 1000;
+    const COCACOLA_MW = (isNaN(COCACOLA?.actualPowerInst) ? 0 : COCACOLA?.actualPowerInst) / 1000;
+    const NASCO_MW = (isNaN(NASCO?.actualPowerInst) ? 0 : NASCO?.actualPowerInst) / 1000;
+    const INDUSTRIAL_JOS_MW = (isNaN(INDUSTRIAL_JOS?.actualPowerInst) ? 0 : INDUSTRIAL_JOS?.actualPowerInst) / 1000;
+    const MAKERI_MW = (isNaN(MAKERI?.actualPowerInst) ? 0 : MAKERI?.actualPowerInst) / 1000;
+    const NEW_GOVT_HOUSE_JOS_MW = (isNaN(NEW_GOVT_HOUSE_JOS?.actualPowerInst) ? 0 : NEW_GOVT_HOUSE_JOS?.actualPowerInst) / 1000;
+    const IBRAHIM_TAIWO_MW = (isNaN(IBRAHIM_TAIWO?.actualPowerInst) ? 0 : IBRAHIM_TAIWO?.actualPowerInst) / 1000;
+    const LIBERTY_DAM_MW = (isNaN(LIBERTY_DAM?.actualPowerInst) ? 0 : LIBERTY_DAM?.actualPowerInst) / 1000;
+    const SECRETARIAT_MW = (isNaN(SECRETARIAT?.actualPowerInst) ? 0 : SECRETARIAT?.actualPowerInst) / 1000;
+    const BUKURU_MW = (isNaN(BUKURU?.actualPowerInst) ? 0 : BUKURU?.actualPowerInst) / 1000;
+    const WEST_OF_MINES_MW = (isNaN(WEST_OF_MINES?.actualPowerInst) ? 0 : WEST_OF_MINES?.actualPowerInst) / 1000;
+    const UNIJOS_MW = (isNaN(UNIJOS?.actualPowerInst) ? 0 : UNIJOS?.actualPowerInst) / 1000;
+    const BCC1_MW = (isNaN(BCC1?.actualPowerInst) ? 0 : BCC1?.actualPowerInst) / 1000;
+    const BCC2_MW = (isNaN(BCC2?.actualPowerInst) ? 0 : BCC2?.actualPowerInst) / 1000;
+
+    const totalMW = GRA_PALACE_MW + WUNTI_ROAD_MW + GUBI_DAM_MW + TEACHING_HOSPITAL_MW +
+      ASHAKA_MW + GOVT_HOUSE_GOMBE_MW + TUNFURE_MW + FMC_MW + GRA_GOMBE_MW +
+      COCACOLA_MW + NASCO_MW + INDUSTRIAL_JOS_MW + MAKERI_MW + NEW_GOVT_HOUSE_JOS_MW +
+      IBRAHIM_TAIWO_MW + LIBERTY_DAM_MW + SECRETARIAT_MW + BUKURU_MW + WEST_OF_MINES_MW +
+      UNIJOS_MW + BCC1_MW + BCC2_MW;
+    // calculate totalEnergy from activeEnergyTotal
+
     const Gombe_Energy = (isNaN(FMC?.activeEnergyTotal) ? 0 : FMC?.activeEnergyTotal) + (isNaN(GRA_GOMBE?.activeEnergyTotal) ? 0 : GRA_GOMBE?.activeEnergyTotal) + 
         (isNaN(TUNFURE?.activeEnergyTotal) ? 0 : TUNFURE?.activeEnergyTotal) + (isNaN(ASHAKA?.activeEnergyTotal) ? 0 : ASHAKA?.activeEnergyTotal) + 
         (isNaN(GOVT_HOUSE_GOMBE?.activeEnergyTotal) ? 0 : GOVT_HOUSE_GOMBE?.activeEnergyTotal);
@@ -261,6 +324,8 @@ class DashboardOverview extends Component {
 
     const Zaria_Jos_Energy = (isNaN(UNIJOS?.activeEnergyTotal) ? 0 : UNIJOS?.activeEnergyTotal) + (isNaN(WEST_OF_MINES?.activeEnergyTotal) ? 0 : WEST_OF_MINES?.activeEnergyTotal);
 
+    const totalEnergy = (Gombe_Energy + Bauchi_Energy + Makari_Jos_Energy + Zaria_Jos_Energy + Yandev_Gboko_Energy)/1000;
+    
     const zones_data = [
       {name: "Bauchi", feeders: [GRA_PALACE, WUNTI_ROAD, GUBI_DAM, TEACHING_HOSPITAL], status: 'normal', currentUsage: (Bauchi_Energy/1000).toFixed(2), dailyAverage: ((Bauchi_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Bauchi_Energy/1000).toFixed(2)},
       {name: "Gombe", feeders: [FMC, GRA_GOMBE, TUNFURE, ASHAKA, GOVT_HOUSE_GOMBE], status: 'normal', currentUsage: (Gombe_Energy/1000).toFixed(2), dailyAverage: ((Gombe_Energy/(Number(new Date().getHours())+1))/1000).toFixed(2), peakDemand: (Gombe_Energy/1000).toFixed(2)},
@@ -290,10 +355,12 @@ class DashboardOverview extends Component {
     if (!data) return null;
 
     return (
-        <div style={{marginLeft: this.props.side_bar_width}} className="main-content grid grid-cols-1 overflow-auto" data-name="main-content">    
+        <div className="main-content grid grid-cols-1 overflow-auto" data-name="main-content">    
           <DashboardHeader 
             totalUsage={data.totalUsage}
             savings={data.savings}
+            totalMW={totalMW}
+            totalEnergy={totalEnergy}
           />
 
           {/* <ZoneOverview zones={data.zones} /> */}

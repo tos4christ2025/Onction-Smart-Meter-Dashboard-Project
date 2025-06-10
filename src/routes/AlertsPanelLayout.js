@@ -29,7 +29,7 @@ class AlertPanel extends React.Component {
         try {
             return (
                 <>
-                <div style={{marginLeft: this.state.side_bar_width}} className="card" data-name="alert-panel">
+                <div className="card" data-name="alert-panel">
                     <h3 className="text-lg font-semibold mb-4" data-name="alert-title">
                         <i className="fas fa-bell mr-2"></i>
                         Recent Alerts

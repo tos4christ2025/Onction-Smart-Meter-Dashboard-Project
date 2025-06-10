@@ -186,7 +186,7 @@ class Availability_Overview extends Component {
   
     return (
       <div  className="dashboard-container" data-name="dashboard">
-          <div style={{marginLeft: this.props.side_bar_width}} className="flex h-screen">
+          <div className="flex h-screen">
             <div style={{zIndex: 1}} className="flex-2 p-5 bg-white overflow-auto">
               <ZoneSidebar
                 zones={uniqueZones}

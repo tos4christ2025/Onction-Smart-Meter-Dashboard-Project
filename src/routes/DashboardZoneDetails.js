@@ -46,6 +46,7 @@ const urls = {
 class DashboardZoneDetails extends Component {
   constructor(props) {
     super(props);
+    this.handleStorageChange = this.handleStorageChange.bind(this);
     this.state = {
       isLoading: true,
       error: null,
@@ -57,17 +58,23 @@ class DashboardZoneDetails extends Component {
       viewMode: "daily", // hourly, daily, weekly
       side_bar_width: this.props.side_bar_width,
       overflow: "overflow-scroll",
-      zones_data: this.props.zones_data || [],
+      zones_data: JSON.parse(localStorage.getItem('app_zone_data')) || [],
     };
   }
 
   componentDidMount() {
-    localStorage.setItem('zone_data', JSON.stringify(this.props.zones_data || []));
-    this.setState({
-        zones_data: this.props.zones_data || [],
-        side_bar_width: this.props.side_bar_width || "250px",
-    })
-  }
+        window.addEventListener("storage", this.handleStorageChange);
+    }
+    componentWillUnmount() {
+        window.removeEventListener("storage", this.handleStorageChange);
+    }
+
+   handleStorageChange = () => {
+        this.setState({
+            zones_data: JSON.parse(localStorage.getItem("app_zone_data")) || {}
+        });
+    };
+
 
   reportError(err) {
     console.error('Dashboard error:', err);
@@ -76,13 +83,12 @@ class DashboardZoneDetails extends Component {
   render() {
     const zoneId = this.props.params.zoneId;
     const { side_bar_width } = this.props;
-    const zones_data = JSON.parse(localStorage.getItem('app_zone_data')) || [];
+    const {zones_data} = this.state;
     const zone = zones_data.filter(zone => {
         const zoneNameLower = zone.name.toLowerCase();
         return zoneNameLower === zoneId;
     });
     console.log("Zone", zone);
-    // return
     const { isLoading, error } = this.state;
     if(!zone || zone.length === 0) {
       console.error("No zones found for the given zoneId:", zoneId);
@@ -111,7 +117,7 @@ class DashboardZoneDetails extends Component {
 
     try {
         return (
-            <div style={{marginLeft: side_bar_width, padding: "50px"}} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="zone-overview">
+            <div style={{padding: "50px"}} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="zone-overview">
                 <button
                         onClick={() => this.props.navigate('/dashboard')}
                         className="mb-4 text-sm bg-gray-300 px-2 py-1 rounded"
