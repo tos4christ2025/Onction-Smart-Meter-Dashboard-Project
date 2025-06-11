@@ -115,7 +115,7 @@ class App extends React.Component {
     this.maxRetries = 5;
   }
   componentDidMount() {
-    console.log(" App Mounted");
+    // console.log(" App Mounted");
     this.fetchData();
     this.fetchEnergyData();
     this.pollingInterval = setInterval(() => {
@@ -130,18 +130,18 @@ class App extends React.Component {
     window.onerror = (message, source, lineno, colno, error) => {
       console.error('Global error:', error);
       this.setState({ error });
-      reportError(error);
+      this.reportError(error);
     };
   }
   componentWillUnmount() {
-    console.log(" App Unmounted");
+    // console.log(" App Unmounted");
     clearInterval(this.AvailabilityintervalId);
      clearInterval(this.pollingInterval);
   }
   componentDidCatch(error, info) {
     this.setState({ error });
     console.error('Error caught in App:', error, info);
-    reportError(error);
+    this.reportError(error);
   }
   setSideBarWidth(width) {
       this.setState({side_bar_width: width});
@@ -248,7 +248,7 @@ class App extends React.Component {
     const Zaria_Jos_Energy = (isNaN(UNIJOS?.activeEnergyTotal) ? 0 : UNIJOS?.activeEnergyTotal) + (isNaN(WEST_OF_MINES?.activeEnergyTotal) ? 0 : WEST_OF_MINES?.activeEnergyTotal);
     const totalEnergy = (Gombe_Energy + Bauchi_Energy + Makari_Jos_Energy + Zaria_Jos_Energy + Yandev_Gboko_Energy)/1000;
 
-    console.log(GRA_PALACE?.status, WUNTI_ROAD?.status, GUBI_DAM?.status, TEACHING_HOSPITAL?.status)
+    // console.log(GRA_PALACE?.status, WUNTI_ROAD?.status, GUBI_DAM?.status, TEACHING_HOSPITAL?.status)
     // Get the status for each Zones
     const Gombe_status = (FMC?.status && GRA_GOMBE?.status && TUNFURE?.status && ASHAKA?.status && GOVT_HOUSE_GOMBE?.status)  ? 'normal' : 'warning';
     const Bauchi_status = (GRA_PALACE?.status && WUNTI_ROAD?.status && GUBI_DAM?.status && TEACHING_HOSPITAL?.status) ? 'normal' : 'warning';
@@ -344,7 +344,7 @@ class App extends React.Component {
 
   // Availability data fetch
   async fetchAvailability() {
-    console.log(" I am fired")
+    // console.log(" I am fired")
       try {
         this.setState({ isLoading: true });
         const complete_data = [];
@@ -412,7 +412,7 @@ class App extends React.Component {
           window.dispatchEvent(new Event("complete_data")); // Notify child component
           localStorage.setItem("dashboardCompute", JSON.stringify(dashboardCompute));
           window.dispatchEvent(new Event("dashboardCompute")); // Notify child component
-          console.log(dashboardCompute, " the total data")
+          // console.log(dashboardCompute, " the total data")
           this.setState({complete_data, dashboardCompute});
           this.setState({ error: null });
         })
@@ -430,6 +430,10 @@ class App extends React.Component {
       }
   }
   // Availability Data fetch end
+
+   reportError(err) {
+    console.error('App error:', err);
+  };
 
   render() {
     // Get the data to pass to the AvailabilityOverview component

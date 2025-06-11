@@ -107,7 +107,7 @@ class DashboardZoneDetails extends Component {
         return zoneNameLower === zoneId;
     });
     const zone_energy = chosenCompleteData?.filter(data => zoneId == data.zone.toLowerCase());
-    console.log(zone_energy, ' the energy of zones')
+    // console.log(zone_energy, ' the energy of zones')
     // console.log(zone, ' the zone')
     const name_mapping = {
         'GRA_PALACE': 'GRA/PALACE',

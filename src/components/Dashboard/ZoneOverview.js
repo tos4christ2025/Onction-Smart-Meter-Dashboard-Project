@@ -17,7 +17,7 @@ class ZoneOverview extends React.Component {
     render() {
         const { zones, dashboardCompute } = this.props;
         const {totalEnergy, totalEnergyTime, totalUptime, totalMW, energy_for_zone} = dashboardCompute;
-        console.log(energy_for_zone, " the energy for zones")
+        // console.log(energy_for_zone, " the energy for zones")
         if (!zones || zones.length === 0) {
             return <div className="text-center text-gray-500">No zones available</div>;
         }

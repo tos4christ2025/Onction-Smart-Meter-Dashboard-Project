@@ -31,7 +31,7 @@ class DashboardOverview extends Component {
   }
 
   componentDidMount() {
-    console.log("mounted");
+    // console.log("mounted");
      window.addEventListener("dashboard_data", this.handleStorageChange);
      window.addEventListener("dashboardCompute", this.handleDashboardCompute);
     // fetch energy data for all the stations at the current moment using the algorithm and update their state
@@ -45,7 +45,7 @@ class DashboardOverview extends Component {
     }
   }
   componentWillUnmount() {
-    console.log("unmounted");
+    // console.log("unmounted");
    window.removeEventListener("complete_data", this.handleStorageChange);
    window.removeEventListener("dashboardCompute", this.handleDashboardCompute);
   }
@@ -87,7 +87,7 @@ class DashboardOverview extends Component {
     const chosenDashboardCompute = dashboardCompute || dashboardCompute_props;
 
     const { energy_for_zone } = chosenDashboardCompute || {};
-    console.log(energy_for_zone, "  energy_for_zone from dashboard overview");
+    // console.log(energy_for_zone, "  energy_for_zone from dashboard overview");
     //  Create the data for EnergyFlow Diagram
     const energyFlow = {
             nodes: ['Main Grid', 'Bauchi', 'Gombe', 'Makari Jos', 'Zaria Road Jos', 'Yandev Gboko', 'Storage'],
