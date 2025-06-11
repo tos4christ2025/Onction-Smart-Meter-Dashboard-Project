@@ -45,7 +45,7 @@ class ZoneOverview extends React.Component {
                             </div>
                             <div className="flex justify-between" data-name="daily-average">
                                 <span className="text-gray-600">Daily Average:</span>
-                                <span className="font-medium">{chartUtils.formatNumber(zone.dailyAverage)} MWh</span>
+                                <span className="font-medium">{chartUtils.formatNumber(zone.dailyAverage)} MW</span>
                             </div>
                             <div className="flex justify-between" data-name="peak-demand">
                                 <span className="text-gray-600">Peak Demand:</span>
