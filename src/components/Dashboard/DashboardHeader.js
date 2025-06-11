@@ -40,7 +40,7 @@ function DashboardHeader({ totalUsage, savings, dashboardCompute }) {
                         <div>{(totalEnergyTime)}Hrs</div>
                     </div>
                     <div className="card" data-name="savings-card">
-                        <div className="text-gray-600 mb-1" data-name="card-label">Average Available</div>
+                        <div className="text-gray-600 mb-1" data-name="card-label">Average Availablility</div>
                         <div className="text-2xl font-bold" data-name="card-value">{chartUtils.formatNumber(totalUptime/22)} Hrs</div>
                         <div className="text-sm text-green-600" data-name="card-change">
                             <i className="fas fa-arrow-up mr-1"></i>
