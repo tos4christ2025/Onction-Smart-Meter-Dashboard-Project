@@ -108,10 +108,10 @@ class DashboardZoneDetails extends Component {
     });
     const zone_energy = chosenCompleteData?.filter(data => zoneId == data.zone.toLowerCase());
     // console.log(zone_energy, ' the energy of zones')
-    // console.log(zone, ' the zone')
+    console.log(zone, ' the zone')
     const name_mapping = {
         'GRA_PALACE': 'GRA/PALACE',
-        'GUBI DAM': 'GUBI 33KV',
+        'GUBI_DAM': 'GUBI 33kV',
         'TEACHING_HOSPITAL': 'TEACHING HOSPITAL',
         'WUNTI_ROAD': 'WUNTI ROAD',
         'ASHAKA': 'ASHAKA I',
