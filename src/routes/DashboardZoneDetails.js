@@ -198,7 +198,7 @@ class DashboardZoneDetails extends Component {
                             </div>
                             <div className="flex justify-between" data-name="daily-average">
                                 <span className="text-gray-600">Daily Average:</span>
-                                <span className="font-medium">{(zoneData?.averagePower/1000).toFixed(2)} MWh</span>
+                                <span className="font-medium">{(zoneData?.averagePower/1000).toFixed(2)} MW</span>
                             </div>
                             <div className="flex justify-between" data-name="peak-demand">
                                 <span className="text-gray-600">Peak Demand:</span>

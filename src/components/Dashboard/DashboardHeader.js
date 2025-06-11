@@ -28,7 +28,7 @@ function DashboardHeader({ totalUsage, savings, dashboardCompute }) {
                             <i className={`fas ${totalUsage.change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i>
                             {Math.abs(totalUsage.change)}% vs last week
                         </div>
-                        <div>{(totalEnergyTime)}Hrs</div>
+                        <div>{(totalEnergyTime).toString().padStart(2, '0')}Hrs</div>
                     </div>
                     <div className="card" data-name="savings-card">
                         <div className="text-gray-600 mb-1" data-name="card-label">Total Energy</div>
