@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import chartUtils from '../../utils/chartUtils';
 
-function DashboardHeader({ totalUsage, savings, totalMW, totalEnergy, averageAvailable }) {
+function DashboardHeader({ totalUsage, savings, dashboardCompute }) {
+    const { totalEnergy, totalUptime, totalEnergyTime, totalMW } =dashboardCompute;
     try {
         return (
             <div className="mb-6" data-name="dashboard-header">
@@ -22,27 +23,30 @@ function DashboardHeader({ totalUsage, savings, totalMW, totalEnergy, averageAva
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="summary-cards">
                     <div className="card" data-name="total-usage-card">
                         <div className="text-gray-600 mb-1" data-name="card-label">Total MW</div>
-                        <div className="text-2xl font-bold" data-name="card-value">{totalMW.toFixed(2)} MW</div>
+                        <div className="text-2xl font-bold" data-name="card-value">{chartUtils.formatNumber(totalMW)} MW</div>
                         <div className={`text-sm ${totalUsage.change >= 0 ? 'text-red-600' : 'text-green-600'}`} data-name="card-change">
                             <i className={`fas ${totalUsage.change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i>
                             {Math.abs(totalUsage.change)}% vs last week
                         </div>
+                        <div>{(totalEnergyTime)}Hrs</div>
                     </div>
                     <div className="card" data-name="savings-card">
                         <div className="text-gray-600 mb-1" data-name="card-label">Total Energy</div>
-                        <div className="text-2xl font-bold" data-name="card-value">{chartUtils.formatNumber(totalEnergy)} MWh</div>
+                        <div className="text-2xl font-bold" data-name="card-value">{chartUtils.formatNumber(totalEnergy/1000)} MWh</div>
                         <div className="text-sm text-green-600" data-name="card-change">
                             <i className="fas fa-arrow-up mr-1"></i>
                             {savings.percentage}% this month
                         </div>
+                        <div>{(totalEnergyTime)}Hrs</div>
                     </div>
                     <div className="card" data-name="savings-card">
                         <div className="text-gray-600 mb-1" data-name="card-label">Average Available</div>
-                        <div className="text-2xl font-bold" data-name="card-value">12 Hrs</div>
+                        <div className="text-2xl font-bold" data-name="card-value">{chartUtils.formatNumber(totalUptime/22)} Hrs</div>
                         <div className="text-sm text-green-600" data-name="card-change">
                             <i className="fas fa-arrow-up mr-1"></i>
                             {savings.percentage}% this month
                         </div>
+                        <div>{(totalEnergyTime)}Hrs</div>
                     </div>
                 </div>
             </div>

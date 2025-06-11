@@ -69,7 +69,7 @@ export const getMockData = () => {
             previousUsage: [42.3, 65.4, 30.8, 22.4, 50.7]
         },
         energyFlow: {
-            nodes: ['Main Grid', 'Bauchi', 'Gombe', 'makari Jos', 'Zaria Road Jos', 'Yandev Gboko', 'Storage'],
+            nodes: ['Main Grid', 'Bauchi', 'Gombe', 'Makari Jos', 'Zaria Road Jos', 'Yandev Gboko', 'Storage'],
             links: [
                 { source: 0, target: 1, value: 20 },
                 { source: 0, target: 2, value: 30 },

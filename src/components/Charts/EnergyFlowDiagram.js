@@ -13,7 +13,7 @@ function EnergyFlowDiagram({ data }) {
             if (container) {
                 setDimensions({
                     width: container.clientWidth,
-                    height: Math.min(400, container.clientWidth * 0.5)
+                    height: Math.min(800, container.clientWidth * 0.5)
                 });
             }
         };
@@ -32,11 +32,11 @@ function EnergyFlowDiagram({ data }) {
             svg.selectAll('*').remove();
 
             const sankeyData = {
-                nodes: data.nodes.map(d => ({ name: d })),
-                links: data.links.map(d => ({
-                    source: d.source,
-                    target: d.target,
-                    value: d.value
+                nodes: data?.nodes.map(d => ({ name: d })),
+                links: data?.links.map(d => ({
+                    source: d?.source,
+                    target: d?.target,
+                    value: d?.value
                 }))
             };
 
@@ -45,20 +45,21 @@ function EnergyFlowDiagram({ data }) {
                 .nodePadding(10)
                 .extent([[1, 1], [dimensions.width - 1, dimensions.height - 6]]);
 
-            const { nodes, links } = sankeyGenerator(sankeyData);
+            const sankeyDataClone = JSON.parse(JSON.stringify(sankeyData));
+            const { nodes, links } = sankeyGenerator(sankeyDataClone);
 
             // Draw nodes
             svg.append('g')
                 .selectAll('rect')
                 .data(nodes)
                 .join('rect')
-                .attr('x', d => d.x0)
-                .attr('y', d => d.y0)
-                .attr('height', d => Math.max(1, d.y1 - d.y0))
-                .attr('width', d => d.x1 - d.x0)
+                .attr('x', d => d?.x0)
+                .attr('y', d => d?.y0)
+                .attr('height', d => Math.max(10, d?.y1 - d?.y0))
+                .attr('width', d => d?.x1 - d?.x0)
                 .attr('fill', '#3b82f6')
                 .append('title')
-                .text(d => `${d.name}\n${d.value.toFixed(2)} kWh`);
+                .text(d => `${d?.name}\n${d?.value?.toFixed(2)}MWh`);
 
             // Add node labels
             svg.append('g')
@@ -69,8 +70,8 @@ function EnergyFlowDiagram({ data }) {
                 .attr('y', d => (d.y1 + d.y0) / 2)
                 .attr('dy', '0.35em')
                 .attr('text-anchor', d => d.x0 < dimensions.width / 2 ? 'start' : 'end')
-                .text(d => `${d.name} (${d.value.toFixed(2)} kWh)`)
-                .style('font-size', '12px')
+                .text(d => `${d.name} (${d?.value?.toFixed(2)} MWh)`)
+                .style('font-size', '14px')
                 .style('fill', '#4b5563');
 
             // Draw links
@@ -83,12 +84,12 @@ function EnergyFlowDiagram({ data }) {
             link.append('path')
                 .attr('d', sankeyLinkHorizontal())
                 .attr('stroke', '#cbd5e1')
-                .attr('stroke-width', d => Math.max(1, d.width))
+                .attr('stroke-width', d => Math.max(1, d?.width))
                 .attr('fill', 'none')
                 .attr('opacity', 0.5);
 
             link.append('title')
-                .text(d => `${d.source.name} → ${d.target.name}\n${d.value.toFixed(2)} kWh`);
+                .text(d => `${d.source.name} → ${d.target.name}\n${d?.value?.toFixed(2)} MWh`);
         }
     }, [data, dimensions]);
 

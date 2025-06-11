@@ -5,7 +5,7 @@ export class PowerDataTable extends Component {
         super(props);
         this.state = {
         currentPage: 1,
-        itemsPerPage: 7,
+        itemsPerPage: 22,
         filter: "All",
         };
     }

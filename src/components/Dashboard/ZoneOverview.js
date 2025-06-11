@@ -15,14 +15,18 @@ class ZoneOverview extends React.Component {
     }
 
     render() {
-        const { zones } = this.props;
+        const { zones, dashboardCompute } = this.props;
+        const {totalEnergy, totalEnergyTime, totalUptime, totalMW, energy_for_zone} = dashboardCompute;
+        console.log(energy_for_zone, " the energy for zones")
         if (!zones || zones.length === 0) {
             return <div className="text-center text-gray-500">No zones available</div>;
         }
         try {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="zone-overview">
-                {zones.map((zone, index) => (
+                {zones.map((zone, index) => {
+                    // console.log(zone, "  each zone")
+                return (
                     <div key={index} className="card m-0 p-1 flex flex-col justify-between relative w-full max-w-sm" data-name="zone-card">
                         <div className="flex justify-between items-center mb-2 flex-wrap" data-name="zone-header">
                             <h3 className="text-lg font-semibold" data-name="zone-title">{zone.name}</h3>
@@ -37,7 +41,7 @@ class ZoneOverview extends React.Component {
                         <div className="space-y-1" data-name="zone-metrics">
                             <div className="flex justify-between" data-name="current-usage">
                                 <span className="text-gray-600">Current Usage:</span>
-                                <span className="font-medium">{chartUtils.formatNumber(zone.currentUsage)} MWh</span>
+                                <span className="font-medium">{chartUtils.formatNumber((energy_for_zone[zone.name])/1000)} MWh</span>
                             </div>
                             <div className="flex justify-between" data-name="daily-average">
                                 <span className="text-gray-600">Daily Average:</span>
@@ -45,7 +49,7 @@ class ZoneOverview extends React.Component {
                             </div>
                             <div className="flex justify-between" data-name="peak-demand">
                                 <span className="text-gray-600">Peak Demand:</span>
-                                <span className="font-medium">{chartUtils.formatNumber(zone.peakDemand)} MW</span>
+                                <span className="font-medium">{chartUtils.formatNumber(zone.dailyAverage)} MW</span>
                             </div>
                         </div>
                         {/* View More Button */}
@@ -60,7 +64,8 @@ class ZoneOverview extends React.Component {
                             </a>
                         </div>
                     </div>
-                ))}
+                )
+                })}
                 
             </div>
         );

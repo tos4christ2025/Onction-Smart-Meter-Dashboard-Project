@@ -59,22 +59,35 @@ class DashboardZoneDetails extends Component {
       side_bar_width: this.props.side_bar_width,
       overflow: "overflow-scroll",
       zones_data: JSON.parse(localStorage.getItem('app_zone_data')) || [],
+      props_zones_data: this.props.zones_data || [],
+      complete_data_props: this.props.complete_data || null,
+      complete_data_localstorage: JSON.parse(localStorage.getItem("complete_data")) || null,
     };
   }
 
   componentDidMount() {
-        window.addEventListener("storage", this.handleStorageChange);
+        window.addEventListener("app_zone_data", this.handleStorageChange);
     }
     componentWillUnmount() {
-        window.removeEventListener("storage", this.handleStorageChange);
+        window.removeEventListener("app_zone_data", this.handleStorageChange);
     }
-
+    componentDidUpdate(prevProps, prevState) {
+        // if(this.props.side_bar_width !== this.state.side_bar_width) {
+        //     this.setState({
+        //         side_bar_width: this.props.side_bar_width
+        //     });
+        // }
+    }
    handleStorageChange = () => {
         this.setState({
             zones_data: JSON.parse(localStorage.getItem("app_zone_data")) || {}
         });
     };
-
+    handleCompleteDataChange = () => {
+        this.setState({
+            zones_data: JSON.parse(localStorage.getItem("app_zone_data")) || {}
+        });
+    };
 
   reportError(err) {
     console.error('Dashboard error:', err);
@@ -82,13 +95,45 @@ class DashboardZoneDetails extends Component {
 
   render() {
     const zoneId = this.props.params.zoneId;
-    const { side_bar_width } = this.props;
-    const {zones_data} = this.state;
-    const zone = zones_data.filter(zone => {
+    const {complete_data_localstorage, complete_data_props} = this.state;
+    const {zones_data, props_zones_data} = this.state;
+    const chosenData = zones_data || props_zones_data;
+    const chosenCompleteData = complete_data_localstorage || complete_data_props;
+    // console.log("chosenData", chosenData);
+    const zone = chosenData.filter(zone => {
         const zoneNameLower = zone.name.toLowerCase();
+        // console.log("Zone Name Lower", zoneNameLower);
+        // console.log("Zone ID", zoneId);
         return zoneNameLower === zoneId;
     });
-    console.log("Zone", zone);
+    const zone_energy = chosenCompleteData?.filter(data => zoneId == data.zone.toLowerCase());
+    console.log(zone_energy, ' the energy of zones')
+    // console.log(zone, ' the zone')
+    const name_mapping = {
+        'GRA_PALACE': 'GRA/PALACE',
+        'GUBI DAM': 'GUBI 33KV',
+        'TEACHING_HOSPITAL': 'TEACHING HOSPITAL',
+        'WUNTI_ROAD': 'WUNTI ROAD',
+        'ASHAKA': 'ASHAKA I',
+        FMC: 'FMC',
+        'GOVT_HOUSE_GOMBE': 'GOVT. HOUSE GOMBE',
+        TUNFURE: 'TUNFURE',
+        'GRA_GOMBE': 'GRA GOMBE',
+        'COCACOLA': 'COCA COLA',
+        NASCO: 'NASCO',
+        'INDUSTRIAL_JOS': 'INDUSTRIAL JOS',
+        MAKERI: 'MAKERI',
+        'NEW_GOVT_HOUSE_JOS': 'NEW GOVT. HOUSE JOS',
+        IBRAHIM_TAIWO: 'IBRAHIM TAIWO',
+        LIBERTY_DAM: 'LIBERTY DAM',
+        SECRETARIAT: 'SECRETARIAT',
+        'WEST_OF_MINES': 'WEST OF MINES',
+        BUKURU: 'BUKURU',
+        UNIJOS: 'UNIJOS',
+        'BCC1': 'DCP1',
+        'BCC2': 'DCP2',
+    }
+    // console.log("Zone", zone);
     const { isLoading, error } = this.state;
     if(!zone || zone.length === 0) {
       console.error("No zones found for the given zoneId:", zoneId);
@@ -130,7 +175,9 @@ class DashboardZoneDetails extends Component {
                 {zone[0].data.map((zone, index) => {
                 const name = Object.keys(zone)[0];
                 const zoneData = zone[name];
-                console.log("Zone Data", zoneData);
+                const zoneEnergy = zone_energy.filter(ze => ze.name == name_mapping[name]);
+                // console.log("zoneEnergy ", zoneEnergy);
+                // console.log("Zone name", name); actualEnergyConsumption
                 // return null;
                 return (
                     <div key={index} className="card m-0 p-1 flex flex-col justify-between relative w-full max-w-sm" data-name="zone-card">
@@ -147,7 +194,7 @@ class DashboardZoneDetails extends Component {
                         <div className="space-y-1" data-name="zone-metrics">
                             <div className="flex justify-between" data-name="current-usage">
                                 <span className="text-gray-600">Current Usage:</span>
-                                <span className="font-medium">{(zoneData?.activeEnergyTotal/1000).toFixed(2)} MWh</span>
+                                <span className="font-medium">{((zoneEnergy[0]?.actualEnergyConsumption)/1000).toFixed(2)} MWh</span>
                             </div>
                             <div className="flex justify-between" data-name="daily-average">
                                 <span className="text-gray-600">Daily Average:</span>

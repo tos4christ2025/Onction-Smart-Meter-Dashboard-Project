@@ -6,36 +6,16 @@ import { ZoneSidebar } from '../components/Sidebar/ZoneSidebar';
 import { PowerDataTable } from '../components/Tables/PowerTable_Zones';
 import data from '../utils/data';
 
-let feeder_ids = [728, 807, 736, 751, 772, 765, 806, 813, 815, 733, 808, 727, 739, 773, 743, 826, 816, 774, 770, 752, 754, 747, 748, 794];
-let trading_point_to_feederId = {
-  "GRA/PALACE" : [{name: "GRA/PALACE", feederId: 765, zone: "Bauchi"}], 
-  "GUBI" : [{name: "GUBI DAM", feederId: 770, zone: "Bauchi"}, {name: "TEACHING HOSPITAL", feederId: 773, zone: "Bauchi"}, {name: "WUNTI ROAD", feederId:	774, zone: "Bauchi"}],
-  "ASHAKA" : [{name: "ASHAKA", feederId: 747, zone: "Gombe"}], 
-  "SHONGO": [{name: "GOVT. HOUSE GOMBE", feederId: 751, zone: "Gombe"}, {name: "TUNFURE", feederId: 743, zone: "Gombe"}], 
-  "FMC" : [{name: "FMC", feederId: 736, zone: "Gombe"}], 
-  "GOMBE TOWN" : [{name: "GRA GOMBE", feederId: 772, zone: "Gombe"}],
-  "MAKERI" : [{name: "COCA COLA", feederId:	807, zone: "Makari Jos"}, {name: "NASCO", feederId: 808, zone: "Makari Jos"}, {name: "INDUSTRIAL JOS", feederId:	806, zone: "Makari Jos"}, {name: "MAKERI", feederId: 733, zone: "Makari Jos"}], 
-  "NEW GOVT. HOUSE JOS" : [{name: "NEW GOVT. HOUSE JOS", feederId: 727, zone: "Makari Jos"}], 
-  "SECRETARIAT" : [{name: "IBRAHIM TAIWO", feederId: 813, zone: "Makari Jos"}, {name: "LIBERTY DAM", feederId: 815, zone: "Makari Jos"}, {name: "SECRETARIAT", feederId: 739, zone: "Makari Jos"}], 
-  "BUKURU" : [{name: "BUKURU", feederId: 728, zone: "Makari Jos"}],
-  "ANGLO JOS" : [{name: "WEST OF MINES", feederId: 816, zone: "Zaria Road Jos"}], 
-  "DOGON DUTSE" : [{name: "UNIJOS", feederId: 826, zone: "Zaria Road Jos"}],
-  "BCC I" : [{name: "BCC I", feederId:	752, zone: "Yandev Gboko"}], 
-  "BCC II" : [{name: "BCC II", feederId: 754, zone: "Yandev Gboko"}]
-}
+
 
 class Availability_Overview extends Component {
   constructor(props) {
     super(props);
     this.showComponent = this.showComponent.bind(this);
-    this.fetchAvailability = this.fetchAvailability.bind(this);
+    this.handleStorageChange = this.handleStorageChange.bind(this);
     this.state = {
       sidebarVisible: window.innerWidth >= 768,
       data: null,
-      complete_data: null,
-      isLoading: true,
-      isFirstLoading: true,
-      error: null,
       sidebarCollapsed: window.innerWidth >= 768 ? false : true,
       viewMode: "daily", // hourly, daily, weekly
       side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
@@ -43,92 +23,64 @@ class Availability_Overview extends Component {
       selectedZone: null,
       showTable: true,
       showText: "Show Chart",
-      showChart: false
+      showChart: false,
+      isFirstLoading: false,
+      isLoading: false,
+      complete_data: null,
+      error: null,
+      complete_data_localstorage: JSON.parse(localStorage.getItem("complete_data")) || null,
+      dashboardCompute_props: this.props.dashboardCompute,
+      dashboardCompute: JSON.parse(localStorage.getItem("dashboardCompute")) || null,
     };
     this.intervalId = null;
   }
 
   componentDidMount() {
-    this.fetchAvailability();
-    this.intervalId = setInterval(() => {
-      this.fetchAvailability();
-    }, 300000);    
+    window.addEventListener("complete_data", this.handleStorageChange);
+    window.addEventListener("dashboardCompute", this.handleDashboardCompute);
+    // this.fetchAvailability();
+    // this.intervalId = setInterval(() => {
+    //   this.fetchAvailability();
+    // }, 300000);
+    // const { isLoading, error, complete_data, isFirstLoading } = this.props;
+    // this.isLoading = isLoading;
+    // this.error = error;
+    // this.complete_data = complete_data;
+    // this.isFirstLoading = isFirstLoading;
+    
   }
   componentWillUnmount() {
     clearInterval(this.intervalId);
+    window.removeEventListener("complete_data", this.handleStorageChange);
+    window.removeEventListener("dashboardCompute", this.handleDashboardCompute);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.isFirstLoading !== this.state.isFirstLoading || this.props.isLoading !== this.state.isLoading
+      || this.props.error !== this.state.error || this.props.complete_data !== this.state.complete_data
+    ) {
+      const { isLoading, error, complete_data, isFirstLoading } = this.props;
+      this.setState({
+        isLoading, error, complete_data, isFirstLoading
+      });
+      // console.log(this.state.complete_data_localstorage, "  this is the complete_data_localstorage inside component did update");
+    }
+    if(prevProps.dashboardCompute !== this.props.dashboardCompute) {
+        this.setState({dashboardCompute_props: this.props.dashboardCompute});
+    }
+  }
+  handleDashboardCompute = () => {
+        this.setState({
+            dashboardCompute: JSON.parse(localStorage.getItem("dashboardCompute")) || {}
+        });
+    };
+  handleStorageChange() {
+    this.setState({
+            complete_data_localstorage: JSON.parse(localStorage.getItem("complete_data")) || {}
+        });
   }
   handleZoneChange = (zone) => {
     this.setState({ selectedZone: zone });
-  };
-  async fetchAvailability() {
-    try {
-      this.setState({ isLoading: true });
-      const complete_data = [];
-      const url = `https://feedercomplianceprodapi.azurewebsites.net/api/v1/Energy/feeder-online-data?apiKey=${process.env.REACT_APP_POWERTECH_API_KEY}`;
-      fetch(url, {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "Content-type": "application/json"
-        }
-      })
-      .then(res => res.json())
-      .then( response => {
-        const { data } = response;
-        if(data?.length > 0) {
-          const filtered_data = data.filter( data => {
-            return feeder_ids.includes(data.feederId);
-          });
-          // Build an Array of Objects from the returned data with needed keys
-          // Iterate over trading_point_to_feederId to get the feederId in order to get the proper
-          // trading_point and zone
-          const trading_point_to_feederId_keys = Object.keys(trading_point_to_feederId);
-          // Iterate over the trading point keys to filter each feeder's Id from the filtered data  
-          trading_point_to_feederId_keys.forEach( tp_keys => {
-            // Get the array containing objects of feeders under this particular trading point
-            const tp_feeders_array = trading_point_to_feederId[tp_keys];
-            // Iterate over the trading point feeders array to perform operations on each feeders
-            tp_feeders_array.forEach(tp_feeder => {
-              // feederId = tp_feeder.feederId == use this to filter for data from the backend
-              // Filter the data for this particular trading point feeder with its feederId matched to the
-              // filtered data from the backend
-              const feeder_data = filtered_data.filter( f_data => f_data.feederId == tp_feeder.feederId);
-              // Create a temporary object that will hold the computed data for this particular feeder
-              // and push the data to complete_data array which will then be used to set state
-              const temp_object = {};
-              const temp_feeder_zone = tp_feeder.zone;
-              temp_object.zone = temp_feeder_zone;
-              temp_object.trading_point = tp_keys;
-              temp_object.name = feeder_data[0].name;
-              temp_object.date = new Date().toLocaleDateString();
-              temp_object.time = new Date().getHours() + ":" + new Date().getMinutes();
-              temp_object.megawatts = feeder_data[0].power;
-              temp_object.voltage = feeder_data[0].voltage1;
-              temp_object.amperes = feeder_data[0].current1;
-              temp_object.feederStatus = Number(feeder_data[0].status) == 1 ? "ON" : "OFF";
-              temp_object.uptime = feeder_data[0].upTimeHours;              
-              complete_data.push(temp_object);              
-            });
-          })          
-        }
-        this.setState({complete_data});
-        this.setState({ error: null });
-      })
-      .catch(err => {
-        this.setState({ error: err });
-        this.reportError(err);
-      })
-      .finally(() => {
-        this.setState({ isLoading: false });
-        this.setState({ isFirstLoading: false });
-      });
-    } catch (err) {
-      this.setState({ error: err });
-      this.reportError(err);
-    } finally {
-      // this.setState({ isLoading: false });
-    }
-  }
+  }; 
   toggleSidebar = () => {
     this.setState((prevState) => ({ 
       sidebarCollapsed: !prevState.sidebarCollapsed,  
@@ -155,13 +107,19 @@ class Availability_Overview extends Component {
   };
 
   render() {
-    const { isLoading, error, showText, complete_data, isFirstLoading } = this.state;
+    // console.log(this.complete_data, this.isFirstLoading, this.isLoading, this.error)
+    const { isLoading, error, complete_data, complete_data_localstorage, dashboardCompute, dashboardCompute_props } = this.state;
+    // console.log(complete_data_localstorage, "  this is the complete_data_localstorage");
+    const isFirstLoading = (!complete_data && !complete_data_localstorage);
+    const chosenData = complete_data || complete_data_localstorage;
+    const chosenDashboardCompute = dashboardCompute || dashboardCompute_props;
+    const { showText } = this.state;
     const { selectedZone } = this.state;
-    const uniqueZones = ["All", ...new Set(complete_data?.map((d) => d.zone))];
+    const uniqueZones = ["All", ...new Set(chosenData?.map((d) => d.zone))];
     // const { sidebarCollapsed, viewMode, sidebarVisible, } = this.state;
     const complete_chart_data = {}
     uniqueZones.forEach(zone => {
-      if(zone !== 'All') complete_chart_data[zone] = complete_data?.filter( data => data.zone == zone);
+      if(zone !== 'All') complete_chart_data[zone] = chosenData?.filter( data => data.zone == zone);
     });
     if (isFirstLoading) {
        return (
@@ -182,7 +140,7 @@ class Availability_Overview extends Component {
     //     </div>
     //   );
     // }
-    if (!complete_data) return null;
+    if (!chosenData) return null;
   
     return (
       <div  className="dashboard-container" data-name="dashboard">
@@ -217,12 +175,16 @@ class Availability_Overview extends Component {
                   </div>
                 )                    
               }
+              <div className="text-gray-500 text-lg mt-2">
+                <p>Total Load</p>
+                {Number(chosenDashboardCompute.totalMW).toFixed(2)} MW
+                </div>
             </div>          
             {this.state.showTable && (<div className="flex-1 p-5 bg-white overflow-auto">
                 <h1 className="text-2xl font-bold mb-4">
                   Power Monitoring Dashboard {selectedZone ? `- ${selectedZone}` : ""}
                 </h1>
-                <PowerDataTable data={complete_data} selectedZone={selectedZone} />
+                <PowerDataTable data={chosenData} selectedZone={selectedZone} />
               </div>)}
             </div>
             {this.state.showChart && (<div style={{width: "700px"}} className="grid grid-cols-1  mt-10 mb-10 mr-2 overflow-auto" data-name="charts-grid">
