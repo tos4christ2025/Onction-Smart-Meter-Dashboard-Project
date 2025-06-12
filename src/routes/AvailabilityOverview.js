@@ -144,15 +144,15 @@ class Availability_Overview extends Component {
   
     return (
       <div  className="dashboard-container" data-name="dashboard">
-          <div className="flex h-screen">
-            <div style={{zIndex: 1}} className="flex-2 p-5 bg-white overflow-auto">
+          <div className="flex  overflow-auto">
+            <div style={{zIndex: 1}} className="flex-2 p-3 bg-white overflow-auto">
               <ZoneSidebar
                 zones={uniqueZones}
                 selectedZone={selectedZone}
                 onZoneChange={this.handleZoneChange}
               />
               <span>
-                <button onClick={this.showComponent} className=" text-sm bg-gray-500 mt-2 p-2 border-4 rounded-md font-medium ">
+                <button onClick={this.showComponent} className=" text-sm bg-gray-500 mt-4 p-2 border-4 rounded-md font-medium ">
                   <p style={{color: "white"}} className="p-1 rounded">{showText}</p>
                 </button>
               </span>
@@ -179,8 +179,9 @@ class Availability_Overview extends Component {
                 <p>Total Load</p>
                 {Number(chosenDashboardCompute.totalMW).toFixed(2)} MW
                 </div>
-            </div>          
-            {this.state.showTable && (<div className="flex-1 p-5 bg-white overflow-auto">
+            </div>
+           
+            {this.state.showTable && (<div className="flex-1 p-5 bg-white overflow-scroll">
                 <h1 className="text-2xl font-bold mb-4">
                   Power Monitoring Dashboard {selectedZone ? `- ${selectedZone}` : ""}
                 </h1>
@@ -190,6 +191,7 @@ class Availability_Overview extends Component {
             {this.state.showChart && (<div style={{width: "700px"}} className="grid grid-cols-1  mt-10 mb-10 mr-2 overflow-auto" data-name="charts-grid">
               <AvailabilityChart complete_chart_data={complete_chart_data} selectedZone={selectedZone} />
             </div>)}
+          
       </div>
     );
   }

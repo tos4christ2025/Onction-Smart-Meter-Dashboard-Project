@@ -14,7 +14,7 @@ class DashboardOverview extends Component {
     this.state = {
       dashboard_data: JSON.parse(localStorage.getItem("dashboard_data")) || null,
       dashboard_data_props: this.props.dashboard_data || null,
-      dashboardCompute_props: this.props.dashboardCompute,
+      dashboardCompute_props: this.props.dashboardCompute || null,
       dashboardCompute: JSON.parse(localStorage.getItem("dashboardCompute")) || null,
       isLoading: true,
       error: null,
@@ -81,7 +81,6 @@ class DashboardOverview extends Component {
 
   render() {
     const { dashboard_data_props, isLoading, error, dashboard_data, dashboardCompute, dashboardCompute_props } = this.state;
-    const isFirstLoading = !dashboard_data && !dashboard_data_props;
     
     const chosenData = dashboard_data || dashboard_data_props;
     const chosenDashboardCompute = dashboardCompute || dashboardCompute_props;
@@ -100,6 +99,8 @@ class DashboardOverview extends Component {
                 { source: 0, target: 6, value: 5 }
             ]
         }
+
+    const isFirstLoading = !chosenData && !chosenDashboardCompute ;
 
     // console.log(chosenDashboardCompute, "  chosenDashboardCompute");
      if (isFirstLoading) {
