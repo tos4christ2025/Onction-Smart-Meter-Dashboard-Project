@@ -88,19 +88,9 @@ class DashboardOverview extends Component {
     const { energy_for_zone } = chosenDashboardCompute || {};
     // console.log(energy_for_zone, "  energy_for_zone from dashboard overview");
     //  Create the data for EnergyFlow Diagram
-    const energyFlow = {
-            nodes: ['Main Grid', 'Bauchi', 'Gombe', 'Makari Jos', 'Zaria Road Jos', 'Yandev Gboko', 'Storage'],
-            links: [
-                { source: 0, target: 1, value: (energy_for_zone['Bauchi']/1000) },
-                { source: 0, target: 2, value: (energy_for_zone['Gombe']/1000) },
-                { source: 0, target: 3, value: (energy_for_zone['Makari Jos']/1000) },
-                { source: 0, target: 4, value: (energy_for_zone['Zaria Road jos']/1000) },
-                { source: 0, target: 5, value: (energy_for_zone['Yandev Gboko']/1000) },
-                { source: 0, target: 6, value: 5 }
-            ]
-        }
+    
 
-    const isFirstLoading = !chosenData && !chosenDashboardCompute ;
+    const isFirstLoading = !chosenData || !chosenDashboardCompute;
 
     // console.log(chosenDashboardCompute, "  chosenDashboardCompute");
      if (isFirstLoading) {
@@ -124,7 +114,19 @@ class DashboardOverview extends Component {
       );
     }
 
-    if (!chosenData) return null;
+    if (!chosenData || !chosenDashboardCompute) return null;
+
+    const energyFlow = {
+            nodes: ['Main Grid', 'Bauchi', 'Gombe', 'Makari Jos', 'Zaria Road Jos', 'Yandev Gboko', 'Storage'],
+            links: [
+                { source: 0, target: 1, value: (energy_for_zone['Bauchi']/1000) },
+                { source: 0, target: 2, value: (energy_for_zone['Gombe']/1000) },
+                { source: 0, target: 3, value: (energy_for_zone['Makari Jos']/1000) },
+                { source: 0, target: 4, value: (energy_for_zone['Zaria Road jos']/1000) },
+                { source: 0, target: 5, value: (energy_for_zone['Yandev Gboko']/1000) },
+                { source: 0, target: 6, value: 5 }
+            ]
+        }
 
     return (
         <div className="main-content grid grid-cols-1 overflow-auto" data-name="main-content">    

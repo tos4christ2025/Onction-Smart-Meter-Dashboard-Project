@@ -105,11 +105,11 @@ class App extends React.Component {
       zones_data: [],
       side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
       app_zone_data: [],
-      dashboard_data: {},
+      dashboard_data: null,
       totalEnergy: null,
       totalUptime: null,
       totalEnergyTime: '',
-      dashboardCompute: {},
+      dashboardCompute: null,
     };
     this.pollingInterval = null;
     this.maxRetries = 5;
