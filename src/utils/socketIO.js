@@ -3,7 +3,7 @@ import openSocket from 'socket.io-client';
 // ONCTION ENERGY Server
 const socket = openSocket('http://178.18.250.74:3000', {
     transports: ['websocket'],
-    secure: true,
+    // secure: true,
     // rejectUnauthorized: true,
     reconnect: true,
     // auth: {
