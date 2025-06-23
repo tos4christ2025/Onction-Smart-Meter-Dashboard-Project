@@ -4,18 +4,14 @@ import { withRouter } from '../utils/withRouter';
 import AvailabilityChart from '../components/Charts/AvailabilityChart';
 import { ZoneSidebar } from '../components/Sidebar/ZoneSidebar';
 import { PowerDataTable } from '../components/Tables/PowerTable_Zones';
-import data from '../utils/data';
-
-
 
 class Availability_Overview extends Component {
   constructor(props) {
     super(props);
     this.showComponent = this.showComponent.bind(this);
-    this.handleStorageChange = this.handleStorageChange.bind(this);
+    this.handleServerDataChange = this.handleServerDataChange.bind(this);
     this.state = {
       sidebarVisible: window.innerWidth >= 768,
-      data: null,
       sidebarCollapsed: window.innerWidth >= 768 ? false : true,
       viewMode: "daily", // hourly, daily, weekly
       side_bar_width: window.innerWidth >= 768 ? "250px" : "60px",
@@ -26,58 +22,22 @@ class Availability_Overview extends Component {
       showChart: false,
       isFirstLoading: false,
       isLoading: false,
-      complete_data: null,
       error: null,
-      complete_data_localstorage: JSON.parse(localStorage.getItem("complete_data")) || null,
-      dashboardCompute_props: this.props.dashboardCompute,
-      dashboardCompute: JSON.parse(localStorage.getItem("dashboardCompute")) || null,
+      serverData: JSON.parse(localStorage.getItem('serverData')) || null,
     };
-    this.intervalId = null;
   }
 
   componentDidMount() {
-    window.addEventListener("complete_data", this.handleStorageChange);
-    window.addEventListener("dashboardCompute", this.handleDashboardCompute);
-    // this.fetchAvailability();
-    // this.intervalId = setInterval(() => {
-    //   this.fetchAvailability();
-    // }, 300000);
-    // const { isLoading, error, complete_data, isFirstLoading } = this.props;
-    // this.isLoading = isLoading;
-    // this.error = error;
-    // this.complete_data = complete_data;
-    // this.isFirstLoading = isFirstLoading;
-    
+    window.addEventListener("serverData", this.handleServerDataChange);    
   }
   componentWillUnmount() {
-    clearInterval(this.intervalId);
-    window.removeEventListener("complete_data", this.handleStorageChange);
-    window.removeEventListener("dashboardCompute", this.handleDashboardCompute);
+    window.removeEventListener("serverData", this.handleServerDataChange);
   }
-  componentDidUpdate(prevProps, prevState) {
-    if(this.props.isFirstLoading !== this.state.isFirstLoading || this.props.isLoading !== this.state.isLoading
-      || this.props.error !== this.state.error || this.props.complete_data !== this.state.complete_data
-    ) {
-      const { isLoading, error, complete_data, isFirstLoading } = this.props;
+  handleServerDataChange = () => {
       this.setState({
-        isLoading, error, complete_data, isFirstLoading
+          serverData: JSON.parse(localStorage.getItem("serverData")) || null
       });
-      // console.log(this.state.complete_data_localstorage, "  this is the complete_data_localstorage inside component did update");
-    }
-    if(prevProps.dashboardCompute !== this.props.dashboardCompute) {
-        this.setState({dashboardCompute_props: this.props.dashboardCompute});
-    }
-  }
-  handleDashboardCompute = () => {
-        this.setState({
-            dashboardCompute: JSON.parse(localStorage.getItem("dashboardCompute")) || {}
-        });
-    };
-  handleStorageChange() {
-    this.setState({
-            complete_data_localstorage: JSON.parse(localStorage.getItem("complete_data")) || {}
-        });
-  }
+  }; 
   handleZoneChange = (zone) => {
     this.setState({ selectedZone: zone });
   }; 
@@ -107,19 +67,51 @@ class Availability_Overview extends Component {
   };
 
   render() {
-    // console.log(this.complete_data, this.isFirstLoading, this.isLoading, this.error)
-    const { isLoading, error, complete_data, complete_data_localstorage, dashboardCompute, dashboardCompute_props } = this.state;
-    // console.log(complete_data_localstorage, "  this is the complete_data_localstorage");
-    const isFirstLoading = (!complete_data && !complete_data_localstorage);
-    const chosenData = complete_data || complete_data_localstorage;
-    const chosenDashboardCompute = dashboardCompute || dashboardCompute_props;
+    // Build the complete data
+    const { serverData } = this.state;
+    // Get the total MW
+    let totalMW = 0;
+    const complete_server_data = [];
+    if(serverData) {
+      totalMW = serverData[0]?.totalMW;
+      serverData.forEach( server_data => {
+        if(server_data.name) {
+          const zone_name = server_data.name;
+          const { trading_points } = server_data;
+          trading_points.forEach(t_p => {
+            const t_p_name = t_p.name;
+            const { feeders } = t_p;
+            feeders.forEach( feeder => {
+              const composed_feeder = {};
+              const { data } = feeder;
+              const date = new Date(data.timestamp).toLocaleDateString();
+              const time = new Date(data.timestamp).toLocaleTimeString();
+              composed_feeder.date = date;
+              composed_feeder.time = time;
+              composed_feeder.zone = zone_name;
+              composed_feeder.trading_point = t_p_name;
+              composed_feeder.name = data.feederName;
+              composed_feeder.megawatts = data.power;
+              composed_feeder.voltage = data.voltage1;
+              composed_feeder.amperes = data.current1;
+              composed_feeder.uptime = data.uptimeHours;
+              composed_feeder.feederStatus = data.status ? "ON" : "OFF";
+              composed_feeder.actualEnergyConsumption = data.actualEnergyConsumption;
+              complete_server_data.push(composed_feeder);
+            });
+          });
+        }
+      });
+    }
+    
+    const { isLoading, error } = this.state;
+    const isFirstLoading = (!complete_server_data);
     const { showText } = this.state;
     const { selectedZone } = this.state;
-    const uniqueZones = ["All", ...new Set(chosenData?.map((d) => d.zone))];
-    // const { sidebarCollapsed, viewMode, sidebarVisible, } = this.state;
+    const uniqueZones = ["All", ...new Set(complete_server_data?.map((d) => d.zone))];
     const complete_chart_data = {}
     uniqueZones.forEach(zone => {
-      if(zone !== 'All') complete_chart_data[zone] = chosenData?.filter( data => data.zone == zone);
+      if(zone !== 'All') complete_chart_data[zone] = complete_server_data?.filter( data => data.zone == zone);
     });
     if (isFirstLoading) {
        return (
@@ -130,17 +122,8 @@ class Availability_Overview extends Component {
         </div>
       );
     }
-    // if (error) {
-    //    (
-    //     <div style={{width: "50%", margin: "0 auto"}} className="flex justify-center items-center h-screen text-red-500" data-name="error">
-    //       <div className="text-center">
-    //         <i className="fas fa-exclamation-triangle fa-3x mb-4"></i>
-    //         <p>Error loading dashboard data</p>
-    //       </div>
-    //     </div>
-    //   );
-    // }
-    if (!chosenData) return null;
+    
+    if (!complete_server_data) return null;
   
     return (
       <div  className="dashboard-container" data-name="dashboard">
@@ -177,7 +160,7 @@ class Availability_Overview extends Component {
               }
               <div className="text-gray-500 text-lg mt-2">
                 <p>Total Load</p>
-                {Number(chosenDashboardCompute.totalMW).toFixed(2)} MW
+                {Number(totalMW).toFixed(2)} MW
                 </div>
             </div>
            
@@ -185,7 +168,7 @@ class Availability_Overview extends Component {
                 <h1 className="text-2xl font-bold mb-4">
                   Power Monitoring Dashboard {selectedZone ? `- ${selectedZone}` : ""}
                 </h1>
-                <PowerDataTable data={chosenData} selectedZone={selectedZone} />
+                <PowerDataTable data={complete_server_data} selectedZone={selectedZone} />
               </div>)}
             </div>
             {this.state.showChart && (<div style={{width: "700px"}} className="grid grid-cols-1  mt-10 mb-10 mr-2 overflow-auto" data-name="charts-grid">

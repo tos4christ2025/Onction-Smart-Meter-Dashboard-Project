@@ -5,7 +5,7 @@ export class PowerDataTable extends Component {
         super(props);
         this.state = {
         currentPage: 1,
-        itemsPerPage: 22,
+        itemsPerPage: 23,
         filter: "All",
         };
     }
@@ -24,7 +24,6 @@ export class PowerDataTable extends Component {
         (r) => `${r.date},${r.time},${r.megawatts},${r.voltage},${r.amperes},${r.feederStatus}`
         );
         const csv = header + rows.join("\n");
-
         const blob = new Blob([csv], { type: "text/csv" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);

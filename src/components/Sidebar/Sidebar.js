@@ -1,7 +1,6 @@
 import React from 'react';
 import MenuItem from './MenuItem';
 import withRouter from '../../utils/withRouter';
-import { on } from 'events';
 
 class Sidebar extends React.Component {
     constructor(props) {
@@ -46,9 +45,15 @@ class Sidebar extends React.Component {
                 </button>
 
                 {!collapsed && (<div className="" data-name="sidebar">
-                    <div className="sidebar-header mt-4" data-name="sidebar-header">
+                    <div 
+                        className="sidebar-header mt-4" data-name="sidebar-header"
+                        style={{cursor: "pointer"}}
+                        onClick={() => {
+                            this.navigateToZone('/');
+                        }}
+                    >
                         <h1 className="text-xl font-bold" data-name="sidebar-title">
-                            <a href='/'>Onction Energy Performance Dashboard</a>
+                            Onction Energy Performance Dashboard
                         </h1>
                     </div>
                     
@@ -72,7 +77,7 @@ class Sidebar extends React.Component {
                             this.setState({ activeItem: 'zones' })
                         }}
                     >
-                        <MenuItem 
+                        {/* <MenuItem 
                             icon="fa-circle" 
                             label="Bauchi"
                             isActive={activeItem === 'zone-a'}
@@ -91,7 +96,7 @@ class Sidebar extends React.Component {
                                 this.setState({ activeItem: 'zone-b' }); 
                                 // this.navigateToZone('zones/:zone-b/energy')
                             }}
-                        />
+                        /> */}
                     </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
@@ -103,7 +108,7 @@ class Sidebar extends React.Component {
                             this.navigateToZone('availability');
                         }}
                     >
-                        <MenuItem 
+                        {/* <MenuItem 
                             icon="fa-circle" 
                             label="Bauchi"
                             isActive={activeItem === 'bauchi'}
@@ -152,7 +157,7 @@ class Sidebar extends React.Component {
                                 this.setState({ activeItem: 'yandev gboko' }); 
                                 // this.navigateToZone('availability/zone-c/');
                             }}
-                        />
+                        /> */}
                     </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
@@ -160,7 +165,7 @@ class Sidebar extends React.Component {
                         isActive={activeItem === 'payments'}
                         onClick={() => this.setState({ activeItem: 'payments' })}
                     >
-                        <MenuItem 
+                        {/* <MenuItem 
                             icon="fa-circle" 
                             label="Zone A"
                             isActive={activeItem === 'zone-a'}
@@ -177,7 +182,7 @@ class Sidebar extends React.Component {
                                 this.setState({ activeItem: 'zone-b' }); 
                                 // this.navigateToZone('zones/:zone-b/payments')
                             }}
-                        />
+                        /> */}
                     </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
@@ -185,7 +190,7 @@ class Sidebar extends React.Component {
                         isActive={activeItem === 'consumption'}
                         onClick={() => this.setState({ activeItem: 'consumption' })}
                     >
-                        <MenuItem 
+                        {/* <MenuItem 
                             icon="fa-circle" 
                             label="Zone A"
                             isActive={activeItem === 'zone-a'}
@@ -202,7 +207,7 @@ class Sidebar extends React.Component {
                                 this.setState({ activeItem: 'zone-b' }); 
                                 // this.navigateToZone('zones/:zone-b/energy_consumption')
                             }}
-                        />
+                        /> */}
                     </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 

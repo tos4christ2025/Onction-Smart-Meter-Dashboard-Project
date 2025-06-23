@@ -16,8 +16,7 @@ class ZoneOverview extends React.Component {
 
     render() {
         const { zones, dashboardCompute } = this.props;
-        const {totalEnergy, totalEnergyTime, totalUptime, totalMW, energy_for_zone} = dashboardCompute;
-        // console.log(energy_for_zone, " the energy for zones")
+        const {energy_for_zone} = dashboardCompute;
         if (!zones || zones.length === 0) {
             return <div className="text-center text-gray-500">No zones available</div>;
         }
@@ -25,7 +24,6 @@ class ZoneOverview extends React.Component {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="zone-overview">
                 {zones.map((zone, index) => {
-                    // console.log(zone, "  each zone")
                 return (
                     <div key={index} className="card m-0 p-1 flex flex-col justify-between relative w-full max-w-sm" data-name="zone-card">
                         <div className="flex justify-between items-center mb-2 flex-wrap" data-name="zone-header">
@@ -55,12 +53,13 @@ class ZoneOverview extends React.Component {
                         {/* View More Button */}
                         <div className="flex justify-end mt-3">
                             <a 
-                                onClick={(e) => {
+                                onClick={() => {
                                     this.props.navigate(`/dashboard/${zone.name.toLowerCase()}`);
                                 }} 
-                                className="px-2 py-1 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 transition flex items-center">
+                                style={{cursor: "pointer"}}
+                                className="px-2 py-1 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 transition flex items-center"
+                                data-name="view-more-button">
                             View More
-                            {/* <span className="ml-1 px-2 py-0.5 text-xs bg-blue-200 text-blue-800 rounded-full">🔍</span> */}
                             </a>
                         </div>
                     </div>

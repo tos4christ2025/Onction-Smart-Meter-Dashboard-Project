@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from '../utils/withRouter';
 
 class IndexPage extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  navigateToZone = (link) => {
+      this.props.navigate(link);
+  };
 
   render() {
 
@@ -11,7 +18,14 @@ class IndexPage extends Component {
               <h1>Welcome to Onction Energy</h1>
                 <p>Take control of your energy data and insights. Navigate through the sidebar to access real-time analytics, reports, and management tools.</p>
                 <p>Click the button below to go to your dashboard and start exploring.</p>
-              <button className="cta"><a href='/dashboard'>Go to Dashboard</a></button>
+              <button 
+              className="cta"
+              onClick={() => {
+                this.navigateToZone('/dashboard')
+              }}
+              >
+                Go to Dashboard
+              </button>
             </div>
         </main>
     );
