@@ -1,13 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {withRouter} from '../../utils/withRouter';
+import chartUtils from '../../utils/chartUtils';
 
-function ZoneOverview({ zones }) {
-    try {
+
+class ZoneOverview extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+   
+    componentDidCatch(error, info) {
+        console.error('Error caught in ZoneOverview:', error, info);
+        reportError(error);
+    }
+
+    render() {
+        const { zones, dashboardCompute } = this.props;
+        const {energy_for_zone} = dashboardCompute;
+        if (!zones || zones.length === 0) {
+            return <div className="text-center text-gray-500">No zones available</div>;
+        }
+        try {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="zone-overview">
-                {zones.map((zone, index) => (
-                    <div key={index} className="card" data-name="zone-card">
-                        <div className="flex justify-between items-center mb-4" data-name="zone-header">
+                {zones.map((zone, index) => {
+                return (
+                    <div key={index} className="card m-0 p-1 flex flex-col justify-between relative w-full max-w-sm" data-name="zone-card">
+                        <div className="flex justify-between items-center mb-2 flex-wrap" data-name="zone-header">
                             <h3 className="text-lg font-semibold" data-name="zone-title">{zone.name}</h3>
                             <span className={`px-2 py-1 rounded-full text-sm ${
                                 zone.status === 'normal' ? 'bg-green-100 text-green-800' : 
@@ -17,29 +36,45 @@ function ZoneOverview({ zones }) {
                                 {zone.status}
                             </span>
                         </div>
-                        <div className="space-y-2" data-name="zone-metrics">
+                        <div className="space-y-1" data-name="zone-metrics">
                             <div className="flex justify-between" data-name="current-usage">
                                 <span className="text-gray-600">Current Usage:</span>
-                                <span className="font-medium">{zone.currentUsage} kWh</span>
+                                <span className="font-medium">{chartUtils.formatNumber((energy_for_zone[zone.name])/1000)} MWh</span>
                             </div>
                             <div className="flex justify-between" data-name="daily-average">
                                 <span className="text-gray-600">Daily Average:</span>
-                                <span className="font-medium">{zone.dailyAverage} kWh</span>
+                                <span className="font-medium">{chartUtils.formatNumber(zone.dailyAverage)} MW</span>
                             </div>
                             <div className="flex justify-between" data-name="peak-demand">
                                 <span className="text-gray-600">Peak Demand:</span>
-                                <span className="font-medium">{zone.peakDemand} kW</span>
+                                <span className="font-medium">{chartUtils.formatNumber(zone.dailyAverage)} MW</span>
                             </div>
                         </div>
+                        {/* View More Button */}
+                        <div className="flex justify-end mt-3">
+                            <a 
+                                onClick={() => {
+                                    this.props.navigate(`/dashboard/${zone.name.toLowerCase()}`);
+                                }} 
+                                style={{cursor: "pointer"}}
+                                className="px-2 py-1 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 transition flex items-center"
+                                data-name="view-more-button">
+                            View More
+                            </a>
+                        </div>
                     </div>
-                ))}
+                )
+                })}
+                
             </div>
         );
-    } catch (error) {
-        console.error('ZoneOverview component error:', error);
-        reportError(error);
-        return null;
+        } catch (error) {
+            console.error('ZoneOverview component error:', error);
+            reportError(error);
+            return null;
+        }
     }
+   
 }
 
 ZoneOverview.propTypes = {
@@ -54,4 +89,4 @@ ZoneOverview.propTypes = {
     ).isRequired
 };
 
-export default ZoneOverview;
+export default withRouter(ZoneOverview);

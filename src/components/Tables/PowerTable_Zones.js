@@ -5,7 +5,7 @@ export class PowerDataTable extends Component {
         super(props);
         this.state = {
         currentPage: 1,
-        itemsPerPage: 5,
+        itemsPerPage: 23,
         filter: "All",
         };
     }
@@ -14,11 +14,9 @@ export class PowerDataTable extends Component {
         currentPage: direction === "next" ? prevState.currentPage + 1 : prevState.currentPage - 1,
         }));
     };
-
     handleFilterChange = (event) => {
         this.setState({ filter: event.target.value, currentPage: 1 });
     };
-
     exportToCSV = () => {
         const { data } = this.props;
         const header = "Date,Time,Megawatts,Voltage,Amperes,Feeder Status\n";
@@ -26,7 +24,6 @@ export class PowerDataTable extends Component {
         (r) => `${r.date},${r.time},${r.megawatts},${r.voltage},${r.amperes},${r.feederStatus}`
         );
         const csv = header + rows.join("\n");
-
         const blob = new Blob([csv], { type: "text/csv" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
@@ -35,7 +32,7 @@ export class PowerDataTable extends Component {
     };
     renderStatusBadge(status) {
         const style =
-        status.toLowerCase() === "online"
+        status.toLowerCase() === "on"
             ? "bg-green-100 text-green-700"
             : "bg-red-100 text-red-700";
         return (
@@ -54,10 +51,6 @@ export class PowerDataTable extends Component {
         } else {
             filteredData = selectedZone ? data.filter((d) => d.zone === selectedZone) : data;
         }
-        
-        // const filteredData2 =
-        // filter === "All" ? data : data.filter((d) => d.feederStatus === filter);
-
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
         const start = (currentPage - 1) * itemsPerPage;
         const visibleData = filteredData.slice(start, start + itemsPerPage);
@@ -65,59 +58,59 @@ export class PowerDataTable extends Component {
         return (
         <>
             <div className="overflow-x-auto w-full">
-                <table className="min-w-full table-auto border border-gray-200 rounded-xl shadow-sm">
-                <thead className="bg-gray-100 text-gray-700 uppercase text-sm">
+                <table className="min-w-full table-auto border-0 border-gray-200 rounded-xl shadow-sm">
+                <thead className="bg-white text-gray-700 uppercase text-sm border-b-2 border-gray-200">
                     <tr>
-                    <th className="px-4 py-3 text-center">Date</th>
-                    <th className="px-4 py-3 text-center">Time</th>
-                    <th className="px-4 py-3 text-center">Zone</th>
-                    <th className="px-4 py-3 text-center">Trading Point</th>
-                    <th className="px-4 py-3 text-center">Name</th>
-                    <th className="px-4 py-3 text-center">MW</th>
-                    <th className="px-4 py-3 text-center">KV</th>
-                    <th className="px-4 py-3 text-center">AMP</th>
-                    <th className="px-4 py-3 text-center">Status</th>
-                    <th className="px-4 py-3 text-center">Uptime</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Date</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Time</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Zone</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Trading Point</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Name</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">MW</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">KV</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">AMP</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Status</th>
+                    <th className="px-4 py-3 text-center border-2 rounded">Uptime</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 text-gray-800 text-sm">
                     {visibleData.map((r, i) => (
                     <tr key={i} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-4 py-2 text-center">{r.date}</td>
-                        <td className="px-1 py-2 text-center">{r.time}</td>
-                        <td className="px-1 py-2 text-center">{r.zone}</td>
-                        <td className="px-1 py-2 text-center">{r.trading_point}</td>
-                        <td className="px-1 py-2 text-center">{r.name}</td>
-                        <td className="px-1 py-2 text-center">{r.megawatts}</td>
-                        <td className="px-1 py-2 text-center">{r.voltage}</td>
-                        <td className="px-1 py-2 text-center">{r.amperes}</td>
-                        <td className="px-1 py-2 text-center">{this.renderStatusBadge(r.feederStatus)}</td>
-                        <td className="px-1 py-2 text-center">{r.uptime}</td>
+                        <td className="px-4 py-2 text-center border-2 rounded">{r.date}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.time}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.zone}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.trading_point}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.name}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.megawatts}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.voltage}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.amperes}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{this.renderStatusBadge(r.feederStatus)}</td>
+                        <td className="px-1 py-2 text-center border-2 rounded">{r.uptime}</td>
                     </tr>
                     ))}
                 </tbody>
                 </table>
             </div>
             <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
-            </span>
-            <div className="space-x-2">
-                <button
-                onClick={() => this.handlePageChange("prev")}
-                disabled={currentPage === 1}
-                className="px-3 py-1 border rounded text-sm disabled:opacity-50"
-                >
-                Prev
-                </button>
-                <button
-                onClick={() => this.handlePageChange("next")}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded text-sm disabled:opacity-50"
-                >
-                Next
-                </button>
-            </div>
+                <span className="text-sm text-gray-600">
+                    Page {currentPage} of {totalPages}
+                </span>
+                <div className="space-x-2">
+                    <button
+                    onClick={() => this.handlePageChange("prev")}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 border rounded text-sm disabled:opacity-50"
+                    >
+                    Prev
+                    </button>
+                    <button
+                    onClick={() => this.handlePageChange("next")}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 border rounded text-sm disabled:opacity-50"
+                    >
+                    Next
+                    </button>
+                </div>
             </div>
         </>
         );
