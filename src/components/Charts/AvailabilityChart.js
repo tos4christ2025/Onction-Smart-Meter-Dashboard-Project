@@ -138,7 +138,7 @@ class AvailabilityChart extends Component {
     render() {
         try {
             return (
-                <div className="card ml-3" data-name="zone-comparison-chart">
+                <div className="grid grid-col-2 card ml-3 w-full" data-name="zone-comparison-chart">
                     <canvas ref={this.chartRef} data-name="zone-comparison-canvas"></canvas>
                 </div>
             );
