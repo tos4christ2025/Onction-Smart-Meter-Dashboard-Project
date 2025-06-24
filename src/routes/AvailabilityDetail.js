@@ -3,7 +3,7 @@ import { withRouter } from '../utils/withRouter';
 import AvailabilityChart from '../components/Charts/AvailabilityChart';
 import { getMockData } from '../utils/dataUtils';
 
-class Availability extends Component {
+class Availability_Details extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -106,4 +106,4 @@ class Availability extends Component {
   }
 }
 
-export default withRouter(Availability);
+export default withRouter(Availability_Details);

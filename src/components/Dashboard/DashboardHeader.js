@@ -1,14 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import chartUtils from '../../utils/chartUtils';
+import { getMockData } from '../../utils/dataUtils';
 
-function DashboardHeader({ totalUsage, savings }) {
+// Work on this later
+const exportToCSV = () => {
+    // const { data } = this.props;
+    const data = getMockData();
+    const header = "Date,Time,Megawatts,Voltage,Amperes,Feeder Status\n";
+    const rows = data.map(
+    (r) => `${r.date},${r.time},${r.megawatts},${r.voltage},${r.amperes},${r.feederStatus}`
+    );
+    const csv = header + rows.join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "power_data.csv";
+    a.click();
+};
+
+function DashboardHeader({ totalUsage, savings, dashboardCompute }) {
+    const { totalEnergy, avgUptime, totalEnergyTime, totalMW } =dashboardCompute;
     try {
         return (
             <div className="mb-6" data-name="dashboard-header">
                 <div className="flex justify-between items-center mb-4 grid grid-cols-1 md:grid-cols-2 gap-4" data-name="header-content">
                     <h1 className="text-2xl font-bold" data-name="dashboard-title">Onction Energy Dashboard</h1>
                     <div className="flex items-center space-x-4" data-name="header-actions">
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors" data-name="export-button">
+                        <button 
+                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors" 
+                            data-name="export-button"
+                            // onClick={() => {
+                            //     exportToCSV()
+                            // }}
+                        >
                             <i className="fas fa-download mr-2"></i>
                             Export Report
                         </button>
@@ -18,22 +43,33 @@ function DashboardHeader({ totalUsage, savings }) {
                         </button>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" data-name="summary-cards">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-name="summary-cards">
                     <div className="card" data-name="total-usage-card">
-                        <div className="text-gray-600 mb-1" data-name="card-label">Total Usage</div>
-                        <div className="text-2xl font-bold" data-name="card-value">{totalUsage.value} kWh</div>
+                        <div className="text-gray-600 mb-1" data-name="card-label">Total MW</div>
+                        <div className="text-2xl font-bold" data-name="card-value">{chartUtils.formatNumber(totalMW)} MW</div>
                         <div className={`text-sm ${totalUsage.change >= 0 ? 'text-red-600' : 'text-green-600'}`} data-name="card-change">
                             <i className={`fas ${totalUsage.change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i>
                             {Math.abs(totalUsage.change)}% vs last week
                         </div>
+                        <div>{(totalEnergyTime).toString().padStart(2, '0')}</div>
                     </div>
                     <div className="card" data-name="savings-card">
-                        <div className="text-gray-600 mb-1" data-name="card-label">Cost Savings</div>
-                        <div className="text-2xl font-bold" data-name="card-value">₦{savings.value*10000}</div>
+                        <div className="text-gray-600 mb-1" data-name="card-label">Total Energy</div>
+                        <div className="text-2xl font-bold" data-name="card-value">{chartUtils.formatNumber(totalEnergy/1000)} MWh</div>
                         <div className="text-sm text-green-600" data-name="card-change">
                             <i className="fas fa-arrow-up mr-1"></i>
                             {savings.percentage}% this month
                         </div>
+                        <div>{(totalEnergyTime)}</div>
+                    </div>
+                    <div className="card" data-name="savings-card">
+                        <div className="text-gray-600 mb-1" data-name="card-label">Average Availablility</div>
+                        <div className="text-2xl font-bold" data-name="card-value">{chartUtils.formatNumber(avgUptime)} Hrs</div>
+                        <div className="text-sm text-green-600" data-name="card-change">
+                            <i className="fas fa-arrow-up mr-1"></i>
+                            {savings.percentage}% this month
+                        </div>
+                        <div>{(totalEnergyTime)}</div>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,32 @@
+.landingpage_container {
+    /* max-width: 600px; */
+    margin: auto;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.landingpage_container h1 {
+    color: #007BFF;
+    font-size: 4em;
+}
+.landingpage_container p {
+    font-size: 18px;
+    color: #333;
+    margin: 3em 0;
+}
+.cta {
+    background: #007BFF;
+    color: white;
+    padding: 12px 20px;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 3em 0;
+}
+.cta:hover {
+    background: #0056b3;
+}
+ 

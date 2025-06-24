@@ -6,7 +6,7 @@ class Sidebar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeItem: 'dashboard',
+            activeItem: '',
         };
     }
     componentDidCatch(error, info) {
@@ -24,12 +24,13 @@ class Sidebar extends React.Component {
             onToggleCollapse,
             side_bar_width,
             overflow,
+            onSelectZone,
         } = this.props;
         
         return (
             <div
                 // style={{width: collapsed ? "4rem" : "15rem"}}
-                style={{width: side_bar_width}}
+                style={{width: side_bar_width, zIndex: 2}}
                 data-name="sidebar"
                 className={`sidebar bg-red ${overflow} border-r border-gray-200 p-4 transition-all duration-300 ${
                 collapsed ? "w-16" : "w-64"
@@ -44,7 +45,13 @@ class Sidebar extends React.Component {
                 </button>
 
                 {!collapsed && (<div className="" data-name="sidebar">
-                    <div className="sidebar-header mt-4" data-name="sidebar-header">
+                    <div 
+                        className="sidebar-header mt-4" data-name="sidebar-header"
+                        style={{cursor: "pointer"}}
+                        onClick={() => {
+                            this.navigateToZone('/');
+                        }}
+                    >
                         <h1 className="text-xl font-bold" data-name="sidebar-title">
                             Onction Energy Performance Dashboard
                         </h1>
@@ -55,6 +62,7 @@ class Sidebar extends React.Component {
                         label="Dashboard"
                         isActive={activeItem === 'dashboard'}
                         onClick={() => {
+                            onSelectZone('dashboard');
                             this.setState({ activeItem: 'dashboard' }); 
                             this.navigateToZone('/dashboard')
                         }}
@@ -63,63 +71,93 @@ class Sidebar extends React.Component {
                         icon="fa-bolt" 
                         label="Energy Zones"
                         isActive={activeItem === 'zones'}
-                        onClick={() => this.setState({ activeItem: 'zones' })}
+                        onClick={() => {
+                            onSelectZone('zones');
+                            // this.navigateToZone('zones');
+                            this.setState({ activeItem: 'zones' })
+                        }}
                     >
-                        <MenuItem 
+                        {/* <MenuItem 
                             icon="fa-circle" 
-                            label="Zone A"
+                            label="Bauchi"
                             isActive={activeItem === 'zone-a'}
                             onClick={() => {
+                                onSelectZone('zones/zone-a');
                                 this.setState({ activeItem: 'zone-a' }); 
                                 // this.navigateToZone('zones/:zone-a/energy')
                             }}
                         />
                         <MenuItem 
                             icon="fa-circle" 
-                            label="Zone B"
+                            label="Gombe"
                             isActive={activeItem === 'zone-b'}
                             onClick={() => {
+                                onSelectZone('zones/zone-b');
                                 this.setState({ activeItem: 'zone-b' }); 
                                 // this.navigateToZone('zones/:zone-b/energy')
                             }}
-                        />
+                        /> */}
                     </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
                         label="Availability"
                         isActive={activeItem === 'availability'}
                         onClick={() => {
+                            onSelectZone('availability');
                             this.setState({ activeItem: 'availability' });   
                             this.navigateToZone('availability');
                         }}
                     >
-                        <MenuItem 
+                        {/* <MenuItem 
                             icon="fa-circle" 
-                            label="Zone A"
-                            isActive={activeItem === 'zone-a'}
+                            label="Bauchi"
+                            isActive={activeItem === 'bauchi'}
                             onClick={() => {
-                                this.setState({ activeItem: 'zone-a' }); 
-                                this.navigateToZone('availability/zone-a/');
+                                onSelectZone('availability/bauchi');
+                                this.setState({ activeItem: 'bauchi' }); 
+                                // this.navigateToZone('availability/zone-a/');
                             }}
                         />
                         <MenuItem 
                             icon="fa-circle" 
-                            label="Zone B"
-                            isActive={activeItem === 'zone-b'}
+                            label="Gombe"
+                            isActive={activeItem === 'gombe'}
                             onClick={() => {
-                                this.setState({ activeItem: 'zone-b' }); 
-                                this.navigateToZone('availability/zone-b/');
+                                onSelectZone('availability/gombe');
+                                this.setState({ activeItem: 'gombe' }); 
+                                // this.navigateToZone('availability/zone-b/');
                             }}
                         />
                         <MenuItem 
                             icon="fa-circle" 
-                            label="Zone C"
-                            isActive={activeItem === 'zone-c'}
+                            label="Makari Jos"
+                            isActive={activeItem === 'makari jos'}
                             onClick={() => {
-                                this.setState({ activeItem: 'zone-c' }); 
-                                this.navigateToZone('availability/zone-c/');
+                                onSelectZone('availability/makari jos');
+                                this.setState({ activeItem: 'makari jos' }); 
+                                // this.navigateToZone('availability/zone-c/');
                             }}
                         />
+                        <MenuItem 
+                            icon="fa-circle" 
+                            label="Zaria Road Jos"
+                            isActive={activeItem === 'zaria road jos'}
+                            onClick={() => {
+                                onSelectZone('availability/zaria road jos');
+                                this.setState({ activeItem: 'zaria road jos' }); 
+                                // this.navigateToZone('availability/zone-c/');
+                            }}
+                        />
+                        <MenuItem 
+                            icon="fa-circle" 
+                            label="Yandev Gboko"
+                            isActive={activeItem === 'yandev gboko'}
+                            onClick={() => {
+                                onSelectZone('availability/yandev gboko');
+                                this.setState({ activeItem: 'yandev gboko' }); 
+                                // this.navigateToZone('availability/zone-c/');
+                            }}
+                        /> */}
                     </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
@@ -127,7 +165,7 @@ class Sidebar extends React.Component {
                         isActive={activeItem === 'payments'}
                         onClick={() => this.setState({ activeItem: 'payments' })}
                     >
-                        <MenuItem 
+                        {/* <MenuItem 
                             icon="fa-circle" 
                             label="Zone A"
                             isActive={activeItem === 'zone-a'}
@@ -144,7 +182,7 @@ class Sidebar extends React.Component {
                                 this.setState({ activeItem: 'zone-b' }); 
                                 // this.navigateToZone('zones/:zone-b/payments')
                             }}
-                        />
+                        /> */}
                     </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
@@ -152,7 +190,7 @@ class Sidebar extends React.Component {
                         isActive={activeItem === 'consumption'}
                         onClick={() => this.setState({ activeItem: 'consumption' })}
                     >
-                        <MenuItem 
+                        {/* <MenuItem 
                             icon="fa-circle" 
                             label="Zone A"
                             isActive={activeItem === 'zone-a'}
@@ -169,7 +207,7 @@ class Sidebar extends React.Component {
                                 this.setState({ activeItem: 'zone-b' }); 
                                 // this.navigateToZone('zones/:zone-b/energy_consumption')
                             }}
-                        />
+                        /> */}
                     </MenuItem>
                     <MenuItem 
                         icon="fa-chart-pie" 
